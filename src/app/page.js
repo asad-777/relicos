@@ -30,6 +30,7 @@ export default function LandingPage() {
           A web platform for discovering and playing curated web-based indie games from itch.io, running entirely in your browser.
         </p>
 
+
       </div>
     </main>
   );

@@ -1,0 +1,21 @@
+# Relic OS
+
+Relic OS is a custom browser-based operating system with a retro Game Boy handheld aesthetic. 
+It is a web platform for discovering and playing curated web-based indie games from itch.io, running entirely in the browser.
+
+Target URL: https://relicos.vercel.app
+Tagline: A Web Os to play your favourite games online.
+
+## Features
+- Window Manager: Draggable, resizable windows with a custom z-index manager.
+- Game Directory: Play web-based indie games from itch.io directly within the OS.
+- Theme System: Multiple retro themes inspired by Game Boy hardware (Original, Pocket, Color, Advance) plus a custom theme builder.
+- Iframe Apps: Includes integrations for games, music, YouTube, and search.
+
+## Tech Stack
+- Frontend: Next.js (App Router), React, JavaScript
+- Styling: Tailwind CSS, DaisyUI
+- Global State: Zustand
+
+## Navigation
+- Home: https://relicos.vercel.app
