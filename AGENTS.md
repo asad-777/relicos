@@ -16,7 +16,7 @@ Relic OS is a custom browser-based operating system with a retro Game Boy handhe
 | Framework     | Next.js (App Router)   | All routing via `app/` directory, no `pages/`                |
 | Language      | JavaScript             | No TypeScript — plain `.js` and `.jsx` files                 |
 | Styling       | Tailwind CSS + DaisyUI | Tailwind for layout/spacing, DaisyUI for base components     |
-| UI Components | ReactBits              | Use for animated/interactive UI primitives where appropriate |
+| UI Components | Shadcn UI & Magic UI   | Shadcn for structural components, Magic UI for animated primitives. Use MCP servers to add them. |
 | State         | Zustand                | Lightweight global state for windows, themes, games          |
 | Backend       | Next.js Route Handlers | API routes inside `app/api/` — no separate Express server    |
 | Database      | PostgreSQL (Supabase)  | Game listings, submission queue                              |
@@ -62,8 +62,8 @@ Update this here
 
 ### 3. Theme System
 
-- CSS custom properties (defined in `globals.css`) are the single source of truth for all colors
-- Tailwind and DaisyUI theme tokens map to these CSS variables — do not hardcode hex values in components
+- DaisyUI 5 themes (defined in `globals.css` via `@plugin "daisyui/theme"`) are the single source of truth for all colors.
+- Use standard DaisyUI utility classes (`bg-base-100`, `text-base-content`, `text-primary`, etc.) — do not hardcode hex values in components.
 - Preset themes named after Game Boy hardware:
   - **Original** — classic green palette (#9BBC0F bg, #0F380F text)
   - **Pocket** — grayscale (white, mid-gray, dark gray, black)
@@ -114,17 +114,17 @@ Update this here
 
 - Use **Tailwind** for layout, spacing, and responsive utilities
 - Use **DaisyUI** components as a base — but override aggressively to match the retro aesthetic
-- There is a simple Daisy ui theme for each suggested theme below pre created in the global.css file, always use that.
-- In global css, make a standard text size and margin and padding ratios, always use thoes in the code, no hard code padding, margin or text size values, these values that are created in global css should use the (minimum , variable size as per display, maximum) mapping rule.
+- DaisyUI 5 themes (`original`, `pocket`, `color`, `advance`, `twilight`) are pre-created in `globals.css` using the `@plugin "daisyui/theme"` syntax. Always use them via standard daisyUI color classes (`bg-base-100`, `text-primary`, etc).
+- In global css, standard text sizes and spacing ratios are mapped using the `clamp()` (min, var, max) rule. Always use Tailwind classes like `text-lg` or `p-md` rather than hardcoded pixel values.
 - There are two default fonts installed to use, make varibale out of these fonts and use them in `global.css` and in general code where necessary, also pre-map these fonts to stuff like, for the main font, use it for text, paragraph tags, for primary font, pre-map it for headings, links, buttons, etc.
-- Use **ReactBits** for animated primitives (text effects, transitions) where it adds to the feel
+- Use **Magic UI** for animated primitives (text effects, transitions, custom cursors) where it adds to the feel
 - Override DaisyUI's default rounded corners — the retro aesthetic uses sharp or minimal radius only
 - **No blur, no glassmorphism, no smooth gradients**
-- **Font:** Press Start 2P (Google Fonts) for headings and UI labels — import in `globals.css`
+- **Fonts:** Local fonts (`primary_font.TTF` for headings, `main_font.ttf` for text) — configured via `next/font/local` in `layout.js` and mapped in `globals.css`
 - **Borders:** Hard 2px solid, sharp corners (no more than `rounded-sm` from Tailwind)
 - **Shadows:** Offset pixel shadow style — `4px 4px 0px` using the theme's darkest color
 - **Icons:** Pixel art style, 16x16 or 32x32, stored in `public/icons/`
-- **Animations:** Minimal — cursor blink, window snap, boot sequence only. No framer-motion unless ReactBits uses it internally.
+- **Animations:** Minimal — cursor blink, window snap, boot sequence only. No framer-motion unless Magic UI uses it internally.
 
 ---
 
@@ -132,6 +132,7 @@ Update this here
 
 ### General
 
+- **MCP Servers:** We actively use Supabase, Shadcn, and Magic UI via local MCP servers. You can use these servers to read docs or add components dynamically.
 - This is a **JavaScript** project — never generate `.ts` or `.tsx` files
 - Always use the **App Router** pattern — no `pages/` directory, no `getServerSideProps`
 - API logic goes in `app/api/*/route.js` as Route Handlers, not in a separate server
