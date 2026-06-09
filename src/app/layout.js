@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SmoothScrolling } from "@/components/ui/smooth-scrolling";
+import PixelSnow from "@/components/PixelSnow";
 import { GA_MEASUREMENT_ID, SITE_CONFIG } from "@/lib/constants";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -54,7 +55,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-theme="original" className={cn(primaryFont.variable, mainFont.variable)} suppressHydrationWarning>
       <head>
         {/* Google Analytics */}
         <Script
@@ -70,17 +71,16 @@ export default function RootLayout({ children }) {
           `}
         </Script>
         {/* Inline script: apply saved theme before first paint to avoid flash. Uses Zustand persist pattern. */}
-        <script
+        <Script
+          id="theme-initializer"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme-storage');if(t){var s=JSON.parse(t);if(s&&s.state&&s.state.theme)document.documentElement.setAttribute('data-theme',s.state.theme);}}catch(e){}})();`,
           }}
         />
       </head>
-      <body className={cn(
-        primaryFont.variable, 
-        mainFont.variable, 
-        "min-h-full h-full flex flex-col font-sans antialiased"
-      )}>
+      <body className="min-h-full h-full flex flex-col antialiased">
+        <PixelSnow />
         <SmoothScrolling>
           {children}
         </SmoothScrolling>
