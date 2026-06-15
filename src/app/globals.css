@@ -12,13 +12,13 @@
   --color-base-100: #9BBC0F;
   --color-base-200: #8BAC0F;
   --color-base-300: #306230;
-  --color-base-content: #0F380F;
-  --color-primary: #0F380F;
-  --color-primary-content: #9BBC0F;
+  --color-base-content: #EEE;
+  --color-primary: #ABCDEF;
+  --color-primary-content: #EEE;
   --color-secondary: #306230;
-  --color-secondary-content: #9BBC0F;
+  --color-secondary-content: #EEE;
   --color-accent: #306230;
-  --color-accent-content: #9BBC0F;
+  --color-accent-content: #EEE;
   --color-neutral: #0F380F;
   --color-neutral-content: #9BBC0F;
   --color-info: #306230;
@@ -171,18 +171,17 @@
   --noise: 0;
 }
 
-/* Fix fonts and mapping for Tailwind v4 */
 @theme {
   --font-heading: var(--font-primary);
   --font-body: var(--font-main);
   
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
-  --radius-2xl: 0;
-  --radius-3xl: 0;
-  --radius-4xl: 0;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+  --radius-4xl: 3rem;
 }
 
 @layer base {
@@ -199,6 +198,10 @@
     --spacing-sm: clamp(0.5rem, 1vw, 0.75rem);
     --spacing-md: clamp(1rem, 2vw, 1.5rem);
     --spacing-lg: clamp(1.5rem, 3vw, 2rem);
+
+    /* Dynamic UI Radii */
+    --radius-window: 0.75rem;
+    --radius-widget: 1rem;
 
     /* Map Shadcn UI and Magic UI variables to DaisyUI colors to prevent conflicts */
     --background: var(--color-base-100);
@@ -221,6 +224,16 @@
     --input: var(--color-base-content);
     --ring: var(--color-primary);
   }
+  
+  [data-corners="round"] {
+    --radius-window: 0.75rem;
+    --radius-widget: 1rem;
+  }
+
+  [data-corners="square"] {
+    --radius-window: 0px;
+    --radius-widget: 0px;
+  }
 }
 
 @theme {
@@ -233,18 +246,29 @@
   body {
     font-family: var(--font-body);
     font-size: var(--text-base);
+    cursor: url('/cursor/cursor.png'), auto;
     @apply bg-base-100 text-base-content;
   }
 
   h1, h2, h3, h4, h5, h6, a, button, input, label {
     font-family: var(--font-heading);
+    font-weight: 600 !important;
+  }
+
+  a, button, [role="button"], input[type="submit"], input[type="button"], input[type="reset"] {
+    cursor: url('/cursor/pointer.png'), pointer;
   }
 
   p {
     font-family: var(--font-body);
   }
+}
 
-  * {
-    @apply border-base-content outline-primary/50;
+@layer utilities {
+  .cursor-default {
+    cursor: url('/cursor/cursor.png'), default !important;
+  }
+  .cursor-pointer {
+    cursor: url('/cursor/pointer.png'), pointer !important;
   }
 }

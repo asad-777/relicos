@@ -1,7 +1,19 @@
+'use client';
+
+import { useState } from 'react';
+import BootScreen from '@/components/OS/BootScreen';
+import Desktop from '@/components/OS/Desktop';
+
 export default function OSPage() {
+  const [isBooting, setIsBooting] = useState(true);
+
   return (
-    <main className="min-h-screen w-full bg-base-100 flex items-center justify-center">
-      <h1 className="font-heading text-xl text-primary animate-pulse">Booting Relic OS...</h1>
+    <main className="min-h-screen w-full bg-base-100 font-body overflow-hidden">
+      {isBooting ? (
+        <BootScreen onComplete={() => setIsBooting(false)} />
+      ) : (
+        <Desktop />
+      )}
     </main>
   );
 }
