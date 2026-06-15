@@ -11,16 +11,7 @@ export const APP_REGISTRY = {
     defaultHeight: 600,
     isDesktopIcon: true,
   },
-  terminal: {
-    id: 'terminal',
-    title: 'Terminal',
-    icon: TerminalSquare,
-    type: 'terminal',
-    color: '#FF5F56',
-    defaultWidth: 600,
-    defaultHeight: 400,
-    isDesktopIcon: true,
-  },
+
   games: {
     id: 'games',
     title: 'Game Directory',

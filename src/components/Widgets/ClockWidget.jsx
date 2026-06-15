@@ -7,7 +7,7 @@ export default function ClockWidget({ time }) {
 
   return (
     <Widget id="clock" defaultX={64} defaultY={200}>
-      <div className="bg-base-200/40 backdrop-blur-sm p-6 rounded-(--radius-widget) border-2 border-white/10 w-full h-full text-base-content drop-shadow-md transition-all duration-300">
+      <div className="bg-base-200/50 backdrop-blur-xl p-6 rounded-(--radius-widget) border-2 border-white/10 w-full h-full text-base-content drop-shadow-md transition-all duration-300">
         <p className="text-2xl font-bold opacity-80 uppercase tracking-widest">
           {time.toLocaleDateString('en-US', { weekday: 'long' })}
         </p>

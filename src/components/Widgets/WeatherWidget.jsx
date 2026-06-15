@@ -14,9 +14,9 @@ export default function WeatherWidget({ time }) {
   };
 
   return (
-    <Widget id="weather" defaultX={64} defaultY={450}>
-      <div className="bg-base-200/40 backdrop-blur-sm p-6 rounded-(--radius-widget) border-2 border-white/10 w-full h-full text-base-content drop-shadow-md transition-all duration-300">
-        <h2 className="text-2xl font-bold uppercase leading-tight">
+    <Widget id="weather" defaultX={64} defaultY={360}>
+      <div className="bg-base-200/50 backdrop-blur-xl p-6 rounded-(--radius-widget) border-2 border-white/10 w-full h-full text-base-content drop-shadow-md transition-all duration-300">
+        <h2 className="text-xl font-bold uppercase tracking-wider mb-4">
           GOOD {getGreeting()},<br/>USER!
         </h2>
         <div className="flex items-center gap-3 mt-4 opacity-90">

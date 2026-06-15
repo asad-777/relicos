@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 
 export default function Widget({ id, defaultX = 100, defaultY = 100, children }) {
-  const [pos, setPos] = useState({ x: defaultX, y: defaultY, width: 320, height: 'auto' });
+  const [pos, setPos] = useState({ x: defaultX, y: defaultY, width: "auto", height: 'auto' });
   const posRef = useRef(pos);
   const widgetRef = useRef(null);
   const dragRef = useRef({ isDragging: false, startX: 0, startY: 0, initialX: 0, initialY: 0 });

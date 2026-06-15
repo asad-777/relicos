@@ -27,7 +27,33 @@ const Dock = React.forwardRef((
   },
   ref
 ) => {
-  const mouseX = useMotionValue(Infinity)
+  const localRef = useRef(null);
+  React.useImperativeHandle(ref, () => localRef.current);
+
+  const mouseX = useMotionValue(Infinity);
+  const mouseY = useMotionValue(Infinity);
+
+  const dockX = useTransform(mouseX, (val) => {
+    if (val === Infinity) return 0;
+    const bounds = localRef.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
+    const center = bounds.x + bounds.width / 2;
+    const dist = val - center;
+    if (Math.abs(dist) > 400) return 0;
+    return (dist / 400) * 30;
+  });
+
+  const dockY = useTransform(mouseY, (val) => {
+    if (val === Infinity) return 0;
+    const bounds = localRef.current?.getBoundingClientRect() ?? { y: 0, height: 0 };
+    const center = bounds.y + bounds.height / 2;
+    const dist = val - center;
+    // Check total distance to mouse to drop magnetism entirely if mouse is far
+    if (Math.abs(dist) > 300) return 0;
+    return (dist / 300) * 20;
+  });
+
+  const springX = useSpring(dockX, { stiffness: 150, damping: 15 });
+  const springY = useSpring(dockY, { stiffness: 150, damping: 15 });
 
   const renderChildren = () => {
     return React.Children.map(children, (child) => {
@@ -50,9 +76,10 @@ const Dock = React.forwardRef((
 
   return (
     <motion.div
-      ref={ref}
-      onMouseMove={(e) => mouseX.set(e.pageX)}
-      onMouseLeave={() => mouseX.set(Infinity)}
+      ref={localRef}
+      style={{ x: springX, y: springY }}
+      onMouseMove={(e) => { mouseX.set(e.pageX); mouseY.set(e.pageY); }}
+      onMouseLeave={() => { mouseX.set(Infinity); mouseY.set(Infinity); }}
       {...props}
       className={cn(dockVariants({ className }), {
         "items-start": direction === "top",
@@ -87,7 +114,11 @@ const DockIcon = ({
 
   const targetSize = disableMagnification ? size : magnification
 
-  const sizeTransform = useTransform(distanceCalc, [-distance, 0, distance], [size, targetSize, size])
+  const sizeTransform = useTransform(
+    distanceCalc, 
+    [-distance, -size, 0, size, distance], 
+    [size, size * 1.3, targetSize, size * 1.3, size]
+  )
 
   const scaleSize = useSpring(sizeTransform, {
     mass: 0.1,

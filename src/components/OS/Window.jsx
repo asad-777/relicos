@@ -110,7 +110,7 @@ export default function Window({ id, title, type, url, x, y, width, height, isMi
       ref={windowRef}
       onPointerDown={() => focusWindow(id)}
       className={cn(
-        "fixed flex flex-col bg-base-100/70 backdrop-blur-xl rounded-(--radius-window) border border-white/20 shadow-2xl overflow-hidden",
+        "fixed flex flex-col bg-base-100 rounded-(--radius-window) border border-white/20 shadow-2xl overflow-hidden",
         isAnimating 
           ? "transition-[opacity,transform,filter,width,height,left,top] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" 
           : "transition-[opacity,transform,filter] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",

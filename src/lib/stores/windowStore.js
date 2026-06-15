@@ -25,13 +25,56 @@ export const useWindowStore = create((set, get) => ({
       return;
     }
 
+    // Calculate new window position
+    let finalX, finalY;
+    const width = windowData.width || 600;
+    const height = windowData.height || 450;
+
+    if (typeof window !== 'undefined') {
+      const centerX = Math.max(0, (window.innerWidth - width) / 2);
+      const centerY = Math.max(0, (window.innerHeight - height) / 2);
+
+      // Define priority spawn points
+      const spawnPoints = [
+        { x: centerX, y: centerY }, // 1. Center
+        { x: 40, y: 80 }, // 2. Top-Left
+        { x: window.innerWidth - width - 40, y: 80 }, // 3. Top-Right
+        { x: 40, y: window.innerHeight - height - 120 }, // 4. Bottom-Left
+        { x: window.innerWidth - width - 40, y: window.innerHeight - height - 120 } // 5. Bottom-Right
+      ];
+
+      let foundPoint = null;
+      for (const pt of spawnPoints) {
+        // Check if there's any window very close to this point
+        const isOccupied = windows.some(w => 
+          !w.isMinimized && Math.abs(w.x - pt.x) < 50 && Math.abs(w.y - pt.y) < 50
+        );
+        if (!isOccupied) {
+          foundPoint = pt;
+          break;
+        }
+      }
+
+      if (foundPoint) {
+        finalX = foundPoint.x;
+        finalY = foundPoint.y;
+      } else {
+        // Fallback to center if all spots are occupied
+        finalX = centerX;
+        finalY = centerY;
+      }
+    } else {
+      finalX = 100;
+      finalY = 100;
+    }
+
     // Spawn new window
     const newWindow = {
       ...windowData,
-      x: windowData.x || 100 + (windows.length * 30),
-      y: windowData.y || 100 + (windows.length * 30),
-      width: windowData.width || 600,
-      height: windowData.height || 450,
+      x: windowData.x !== undefined ? windowData.x : finalX,
+      y: windowData.y !== undefined ? windowData.y : finalY,
+      width,
+      height,
       isOpen: true,
       isMinimized: false,
       isMaximized: false,
