@@ -15,6 +15,7 @@ import MusicPlayer from '@/components/Apps/MusicPlayer';
 import SettingsApp from '@/components/Apps/Settings';
 import WidgetApp from '@/components/Apps/WidgetApp';
 import BrowserApp from '@/components/Apps/BrowserApp';
+import YoutubeApp from '@/components/Apps/YoutubeApp';
 import { APP_REGISTRY } from '@/lib/appRegistry';
 import { WIDGET_REGISTRY } from '@/lib/widgetRegistry';
 import DesktopIcon from '@/components/OS/DesktopIcon';
@@ -264,6 +265,9 @@ export default function Desktop() {
             )}
             {w.type === 'browser' && (
               <BrowserApp />
+            )}
+            {w.type === 'youtube' && (
+              <YoutubeApp />
             )}
           </Window>
           );

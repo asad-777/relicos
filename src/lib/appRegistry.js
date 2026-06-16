@@ -1,5 +1,6 @@
-import { Activity, TerminalSquare, Box, Calculator, Music, LayoutDashboard, Globe } from 'lucide-react';
+import { Activity, TerminalSquare, Box, Calculator, Music, LayoutDashboard, Globe, PlaySquare } from 'lucide-react';
 import BrowserApp from '@/components/Apps/BrowserApp';
+import YoutubeApp from '@/components/Apps/YoutubeApp';
 
 export const APP_REGISTRY = {
   settings: {
@@ -62,6 +63,17 @@ export const APP_REGISTRY = {
     color: '#0052FF',
     defaultWidth: 900,
     defaultHeight: 700,
+    isDesktopIcon: true,
+  },
+  youtube: {
+    id: 'youtube',
+    title: 'YouTube',
+    icon: PlaySquare,
+    component: YoutubeApp,
+    type: 'youtube',
+    color: '#FF0000',
+    defaultWidth: 800,
+    defaultHeight: 600,
     isDesktopIcon: true,
   }
 };
