@@ -1,4 +1,5 @@
-import { Activity, TerminalSquare, Box, Calculator, Music, LayoutDashboard } from 'lucide-react';
+import { Activity, TerminalSquare, Box, Calculator, Music, LayoutDashboard, Globe } from 'lucide-react';
+import BrowserApp from '@/components/Apps/BrowserApp';
 
 export const APP_REGISTRY = {
   settings: {
@@ -50,6 +51,17 @@ export const APP_REGISTRY = {
     color: '#FF8C00',
     defaultWidth: 600,
     defaultHeight: 500,
+    isDesktopIcon: true,
+  },
+  browser: {
+    id: 'browser',
+    title: 'Internet Browser',
+    icon: Globe,
+    component: BrowserApp,
+    type: 'browser',
+    color: '#0052FF',
+    defaultWidth: 900,
+    defaultHeight: 700,
     isDesktopIcon: true,
   }
 };
