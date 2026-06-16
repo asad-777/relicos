@@ -1,4 +1,4 @@
-import { Activity, TerminalSquare, Box, Calculator, Music } from 'lucide-react';
+import { Activity, TerminalSquare, Box, Calculator, Music, LayoutDashboard } from 'lucide-react';
 
 export const APP_REGISTRY = {
   settings: {
@@ -39,6 +39,16 @@ export const APP_REGISTRY = {
     type: 'music',
     color: '#FF1493',
     defaultWidth: 400,
+    defaultHeight: 500,
+    isDesktopIcon: true,
+  },
+  widgets: {
+    id: 'widgets',
+    title: 'Widgets',
+    icon: LayoutDashboard,
+    type: 'widgets',
+    color: '#FF8C00',
+    defaultWidth: 600,
     defaultHeight: 500,
     isDesktopIcon: true,
   }

@@ -3,23 +3,14 @@
 import Widget from '../OS/Widget';
 import { Sun } from 'lucide-react';
 
-export default function WeatherWidget({ time }) {
+export default function WeatherWidget({ instanceId, initialX = 64, initialY = 360, initialWidth, initialHeight, preview, time }) {
   if (!time) return null;
 
-  const getGreeting = () => {
-    const hour = time.getHours();
-    if (hour < 12) return 'MORNING';
-    if (hour < 18) return 'AFTERNOON';
-    return 'EVENING';
-  };
 
   return (
-    <Widget id="weather" defaultX={64} defaultY={360}>
-      <div className="bg-base-200/50 backdrop-blur-xl p-6 rounded-(--radius-widget) border-2 border-white/10 w-full h-full text-base-content drop-shadow-md transition-all duration-300">
-        <h2 className="text-xl font-bold uppercase tracking-wider mb-4">
-          GOOD {getGreeting()},<br/>USER!
-        </h2>
-        <div className="flex items-center gap-3 mt-4 opacity-90">
+    <Widget instanceId={instanceId} initialX={initialX} initialY={initialY} initialWidth={initialWidth} initialHeight={initialHeight} preview={preview}>
+      <div className="bg-base-200/50 backdrop-blur-xl p-6 rounded-[var(--radius-widget)] border-2 border-white/10 w-full min-w-[250px] h-full min-h-[120px] text-base-content drop-shadow-md transition-all duration-300">
+          <div className="flex items-center gap-3  opacity-90">
           <div className="bg-warning text-warning-content p-2 rounded-xl">
             <Sun size={24} />
           </div>

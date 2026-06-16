@@ -70,7 +70,7 @@ export default function TopBar({ hasActiveWindows, time, setIsLauncherOpen, isCa
       </div>
 
       {/* Right Side: Links */}
-      <div className={`flex items-center gap-6 h-full text-lg font-bold uppercase tracking-wider pr-2 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+      <div className={`flex items-center gap-2 h-full text-lg  font-bold uppercase tracking-wider pr-2 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
         hasActiveWindows ? 'opacity-0 scale-95 pointer-events-none blur-sm group-hover/topbar:opacity-100 group-hover/topbar:scale-100 group-hover/topbar:pointer-events-auto group-hover/topbar:blur-none' : 'opacity-100 scale-100 blur-none'
       }`}>
         <a href="https://x.com/_asad_777" target="_blank" rel="noreferrer" className="flex items-center justify-center opacity-80 hover:opacity-100 hover:text-primary transition-all cursor-pointer group/link w-8 h-8">

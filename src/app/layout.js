@@ -3,7 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SmoothScrolling } from "@/components/ui/smooth-scrolling";
-import PixelSnow from "@/components/PixelSnow";
+import PixelSnowWrapper from "@/components/PixelSnowWrapper";
 import { GA_MEASUREMENT_ID, SITE_CONFIG } from "@/lib/constants";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -80,7 +80,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="min-h-full h-full flex flex-col antialiased">
-        <PixelSnow />
+        <PixelSnowWrapper />
         <SmoothScrolling>
           {children}
         </SmoothScrolling>

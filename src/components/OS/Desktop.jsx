@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useWindowStore } from '@/lib/stores/windowStore';
+import { useWidgetStore } from '@/lib/stores/widgetStore';
 import { useThemeStore, THEMES, BACKGROUNDS } from '@/lib/stores/themeStore';
 import Window from './Window';
 import AppLauncher from './AppLauncher';
@@ -12,14 +13,17 @@ import GameDirectory from '@/components/Apps/GameDirectory';
 import CalculatorApp from '@/components/Apps/Calculator';
 import MusicPlayer from '@/components/Apps/MusicPlayer';
 import SettingsApp from '@/components/Apps/Settings';
+import WidgetApp from '@/components/Apps/WidgetApp';
 import { APP_REGISTRY } from '@/lib/appRegistry';
 import { WIDGET_REGISTRY } from '@/lib/widgetRegistry';
 import DesktopIcon from '@/components/OS/DesktopIcon';
+import SystemAudio from '@/components/OS/SystemAudio';
 import { Box } from 'lucide-react';
 import TopBar from './TopBar';
 
 export default function Desktop() {
   const { windows, restoreWindow, focusWindow, openWindow, closeWindow } = useWindowStore();
+  const { activeWidgets } = useWidgetStore();
   const { theme, background } = useThemeStore();
 
   const [time, setTime] = useState(new Date());
@@ -186,6 +190,8 @@ export default function Desktop() {
         </Dock>
       </div>
 
+      <SystemAudio />
+
       {/* Desktop Area */}
       <div className="relative flex-1 w-full"
         onClick={() => {
@@ -195,9 +201,21 @@ export default function Desktop() {
       >
         {/* Draggable Desktop Widgets */}
         <div className="absolute inset-0 pointer-events-none z-0">
-          {Object.values(WIDGET_REGISTRY).map(widget => {
-            const WidgetComponent = widget.component;
-            return <WidgetComponent key={widget.id} time={time} />;
+          {activeWidgets.map(widgetInstance => {
+            const widgetDef = WIDGET_REGISTRY[widgetInstance.widgetId];
+            if (!widgetDef) return null;
+            const WidgetComponent = widgetDef.component;
+            return (
+              <WidgetComponent 
+                key={widgetInstance.instanceId} 
+                instanceId={widgetInstance.instanceId}
+                initialX={widgetInstance.x}
+                initialY={widgetInstance.y}
+                initialWidth={widgetInstance.width}
+                initialHeight={widgetInstance.height}
+                time={time} 
+              />
+            );
           })}
         </div>
 
@@ -227,6 +245,9 @@ export default function Desktop() {
             )}
             {w.type === 'music' && (
               <MusicPlayer />
+            )}
+            {w.type === 'widgets' && (
+              <WidgetApp />
             )}
           </Window>
           );

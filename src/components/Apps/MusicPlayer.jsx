@@ -1,73 +1,28 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useMusicStore, TRACKS } from '@/lib/stores/musicStore';
 import BaseApp from './BaseApp';
 import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Music as MusicIcon } from 'lucide-react';
 
-const TRACKS = [
-  "L.mp3",
-  "fast.mp3",
-  "funky.mp3",
-  "just do it.mp3",
-  "kkkkk.mp3",
-  "Kiss my lips nigga.mp3"
-];
-
 export default function MusicPlayer() {
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [isMuted, setIsMuted] = useState(false);
-  
-  const audioRef = useRef(null);
+  const { 
+    currentTrackIndex, 
+    isPlaying, 
+    progress, 
+    duration, 
+    isMuted, 
+    togglePlay, 
+    nextTrack, 
+    prevTrack, 
+    setSeekRequest, 
+    toggleMute 
+  } = useMusicStore();
 
   const currentTrack = TRACKS[currentTrackIndex];
 
-  useEffect(() => {
-    if (isPlaying) {
-      audioRef.current?.play().catch(e => console.error("Playback prevented", e));
-    } else {
-      audioRef.current?.pause();
-    }
-  }, [isPlaying, currentTrackIndex]);
-
-  const togglePlay = () => setIsPlaying(!isPlaying);
-
-  const nextTrack = () => {
-    setCurrentTrackIndex((prev) => (prev + 1) % TRACKS.length);
-    setIsPlaying(true);
-  };
-
-  const prevTrack = () => {
-    setCurrentTrackIndex((prev) => (prev - 1 + TRACKS.length) % TRACKS.length);
-    setIsPlaying(true);
-  };
-
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      setProgress(audioRef.current.currentTime);
-      setDuration(audioRef.current.duration || 0);
-    }
-  };
-
   const handleSeek = (e) => {
     const time = parseFloat(e.target.value);
-    if (audioRef.current) {
-      audioRef.current.currentTime = time;
-      setProgress(time);
-    }
-  };
-
-  const handleEnded = () => {
-    nextTrack();
-  };
-
-  const toggleMute = () => {
-    if (audioRef.current) {
-      audioRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
+    setSeekRequest(time);
   };
 
   const formatTime = (time) => {
@@ -80,12 +35,7 @@ export default function MusicPlayer() {
   return (
     <BaseApp>
       <div className="flex flex-col h-full bg-base-100 p-6 overflow-hidden items-center justify-between">
-        <audio 
-          ref={audioRef} 
-          src={`/music/${currentTrack}`} 
-          onTimeUpdate={handleTimeUpdate}
-          onEnded={handleEnded}
-        />
+      <div className="flex flex-col h-full bg-base-100 p-6 overflow-hidden items-center justify-between">
         
         {/* Album Art Placeholder */}
         <div className="w-48 h-48 sm:w-64 sm:h-64 rounded-(--radius-widget) bg-base-300 border-4 border-base-content/20 flex items-center justify-center shadow-lg relative overflow-hidden group">
@@ -155,6 +105,7 @@ export default function MusicPlayer() {
           </button>
         </div>
       </div>
+      </div>
     </BaseApp>
-  );
+  )
 }

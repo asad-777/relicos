@@ -83,6 +83,7 @@ export default function Window({ id, title, type, url, x, y, width, height, isMi
     if (!el) return;
 
     const observer = new ResizeObserver((entries) => {
+      if (isAnimating || isMaximized) return;
       for (let entry of entries) {
         // use offsetWidth/Height to include borders if any
         if (el.offsetWidth !== width || el.offsetHeight !== height) {
@@ -161,7 +162,7 @@ export default function Window({ id, title, type, url, x, y, width, height, isMi
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto bg-transparent relative">
+      <div className="flex-1 overflow-auto bg-transparent relative min-h-0">
         {children}
       </div>
     </div>

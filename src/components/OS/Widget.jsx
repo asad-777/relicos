@@ -1,33 +1,28 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
+import { useWidgetStore } from '@/lib/stores/widgetStore';
+import { X } from 'lucide-react';
 
-export default function Widget({ id, defaultX = 100, defaultY = 100, children }) {
-  const [pos, setPos] = useState({ x: defaultX, y: defaultY, width: "auto", height: 'auto' });
+export default function Widget({ instanceId, initialX = 100, initialY = 100, initialWidth = 'auto', initialHeight = 'auto', preview = false, children }) {
+  const [pos, setPos] = useState({ x: initialX, y: initialY, width: initialWidth, height: initialHeight });
   const posRef = useRef(pos);
   const widgetRef = useRef(null);
   const dragRef = useRef({ isDragging: false, startX: 0, startY: 0, initialX: 0, initialY: 0 });
+  const { updateWidgetPosition, updateWidgetSize, removeWidget } = useWidgetStore();
 
   // Keep ref up to date
   useEffect(() => {
-    posRef.current = pos;
-  }, [pos]);
+    if (!preview) posRef.current = pos;
+  }, [pos, preview]);
 
-  // Try to load position from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem(`widget_pos_${id}`);
-    if (saved) {
-      try {
-        setPos(JSON.parse(saved));
-      } catch (e) {}
-    }
-  }, [id]);
-
-  // Save position to localStorage
-  const savePosition = (newPos) => {
-    setPos(newPos);
-    localStorage.setItem(`widget_pos_${id}`, JSON.stringify(newPos));
-  };
+  if (preview) {
+    return (
+      <div className="relative w-max h-max rounded-[var(--radius-widget)] overflow-hidden pointer-events-none flex items-center justify-center">
+        {children}
+      </div>
+    );
+  }
 
   const handlePointerDown = (e) => {
     if (e.button !== 0) return; // Only left click
@@ -65,7 +60,7 @@ export default function Widget({ id, defaultX = 100, defaultY = 100, children })
     const newX = dragRef.current.initialX + dx;
     const newY = Math.max(0, dragRef.current.initialY + dy); // Prevent dragging off top
 
-    // We don't save to localStorage on every move to avoid performance issues,
+    // We don't save to global store on every move to avoid performance issues,
     // just update state
     setPos(prev => ({ ...prev, x: newX, y: newY }));
   };
@@ -76,7 +71,7 @@ export default function Widget({ id, defaultX = 100, defaultY = 100, children })
     document.removeEventListener('pointerup', handlePointerUp);
     
     // Save final position
-    savePosition(posRef.current);
+    updateWidgetPosition(instanceId, posRef.current.x, posRef.current.y);
   };
 
   // ResizeObserver to handle widget resizing
@@ -94,7 +89,7 @@ export default function Widget({ id, defaultX = 100, defaultY = 100, children })
           if (newWidth !== posRef.current.width || newHeight !== posRef.current.height) {
             const newPos = { ...posRef.current, width: newWidth, height: newHeight };
             setPos(newPos);
-            savePosition(newPos);
+            updateWidgetSize(instanceId, newWidth, newHeight);
           }
         }, 300);
       }
@@ -102,7 +97,7 @@ export default function Widget({ id, defaultX = 100, defaultY = 100, children })
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [id]);
+  }, [instanceId, updateWidgetSize]);
 
   useEffect(() => {
     return () => {
@@ -129,6 +124,18 @@ export default function Widget({ id, defaultX = 100, defaultY = 100, children })
       {/* Draggable overlay handle that shows on hover */}
       <div className="absolute top-2 left-1/2 -translate-x-1/2 w-12 h-1.5 rounded-full bg-white/40 opacity-0 group-hover/widget:opacity-100 transition-opacity backdrop-blur-md cursor-move z-50"></div>
       
+      {/* Remove Button */}
+      <button 
+        onClick={(e) => {
+          e.stopPropagation();
+          removeWidget(instanceId);
+        }}
+        className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full bg-error/90 text-error-content opacity-0 group-hover/widget:opacity-100 hover:bg-error transition-all z-[60] cursor-pointer shadow-md border border-white/20 hover:scale-110"
+        title="Remove Widget"
+      >
+        <X size={14} strokeWidth={3} />
+      </button>
+
       {children}
     </div>
   );

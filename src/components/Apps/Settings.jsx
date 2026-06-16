@@ -36,7 +36,7 @@ export default function Settings() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 p-8 overflow-y-auto" data-lenis-prevent="true">
+      <div className="flex-1 min-h-0 p-8 overflow-y-auto" data-lenis-prevent="true">
         {activeTab === 'appearance' && (
           <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-right-4 duration-300">
             <h2 className="text-2xl font-bold border-b border-base-content/10 pb-2">Theme Selector</h2>
