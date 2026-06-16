@@ -1,7 +1,9 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
+
 import { useMusicStore, TRACKS } from '@/lib/stores/musicStore';
+import { useSystemStore } from '@/lib/stores/systemStore';
 
 export default function SystemAudio() {
   const audioRef = useRef(null);
@@ -9,13 +11,14 @@ export default function SystemAudio() {
   const { 
     currentTrackIndex, 
     isPlaying, 
-    isMuted, 
     seekRequest, 
     setProgress, 
     setDuration, 
     nextTrack, 
     clearSeekRequest 
   } = useMusicStore();
+
+  const { volume, isMuted } = useSystemStore();
 
   const currentTrack = TRACKS[currentTrackIndex];
 
@@ -32,7 +35,8 @@ export default function SystemAudio() {
   useEffect(() => {
     if (!audioRef.current) return;
     audioRef.current.muted = isMuted;
-  }, [isMuted]);
+    audioRef.current.volume = volume / 100;
+  }, [isMuted, volume]);
 
   useEffect(() => {
     if (seekRequest !== null && audioRef.current) {

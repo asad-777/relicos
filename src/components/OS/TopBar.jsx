@@ -1,12 +1,25 @@
 'use client';
 
-import { Search, Globe } from 'lucide-react';
+import { Search, Volume2, Sun, Globe, Play, Pause, CloudSun, ChevronRight, SkipForward } from 'lucide-react';
 import CalendarPopup from '@/components/OS/CalendarPopup';
+import ControlCenter from '@/components/OS/ControlCenter';
+import { useSystemStore } from '@/lib/stores/systemStore';
+import { useMusicStore, TRACKS } from '@/lib/stores/musicStore';
+import { useWindowStore } from '@/lib/stores/windowStore';
+import { APP_REGISTRY } from '@/lib/appRegistry';
 
 const GithubIcon = ({ size, className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
-    <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.379.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z"/>
+    <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.45-1.15-1.11-1.46-1.11-1.46-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"></path>
   </svg>
+);
+
+const Equalizer = ({ isPlaying }) => (
+  <div className="flex items-end gap-[2px] h-[16px] w-[16px]">
+    <div className={`w-[4px] bg-primary rounded-sm transition-all ${isPlaying ? 'animate-eq' : 'h-[4px]'}`} />
+    <div className={`w-[4px] bg-primary rounded-sm transition-all ${isPlaying ? 'animate-eq-2' : 'h-[4px]'}`} />
+    <div className={`w-[4px] bg-primary rounded-sm transition-all ${isPlaying ? 'animate-eq-3' : 'h-[4px]'}`} />
+  </div>
 );
 
 const LinkedinIcon = ({ size, className }) => (
@@ -21,7 +34,20 @@ const XIcon = ({ size, className }) => (
   </svg>
 );
 
-export default function TopBar({ hasActiveWindows, time, setIsLauncherOpen, isCalendarOpen, setIsCalendarOpen }) {
+export default function TopBar({ 
+  hasActiveWindows, time, 
+  setIsLauncherOpen, 
+  isCalendarOpen, setIsCalendarOpen,
+  isControlCenterOpen, setIsControlCenterOpen
+}) {
+  const { currentTrackIndex, isPlaying, togglePlay, nextTrack } = useMusicStore();
+  const { windows, activeZIndex } = useWindowStore();
+  const currentTrack = TRACKS[currentTrackIndex];
+
+  // Find active window
+  const activeWindow = windows.find(w => w.zIndex === activeZIndex && !w.isMinimized);
+  const activeAppName = activeWindow ? (APP_REGISTRY[activeWindow.type]?.title || activeWindow.title || 'App') : null;
+
   return (
     <div className={`absolute left-1/2 -translate-x-1/2 top-4 z-9999 backdrop-blur-xl flex items-center justify-between shadow-[4px_4px_0px_rgba(0,0,0,0.3)] transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group/topbar border-2 border-white/10 ${
       hasActiveWindows 
@@ -29,8 +55,8 @@ export default function TopBar({ hasActiveWindows, time, setIsLauncherOpen, isCa
         : 'w-[calc(100%-2rem)] max-w-none h-16 rounded-[32px] px-8 bg-base-200/50'
     }`}>
       
-      {/* Left Side: Spotlight */}
-      <div className={`flex items-center gap-4 h-full pl-2 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+      {/* Left Side: Spotlight & Socials */}
+      <div className={`flex items-center gap-6 h-full pl-2 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
         hasActiveWindows ? 'opacity-0 scale-95 pointer-events-none blur-sm group-hover/topbar:opacity-100 group-hover/topbar:scale-100 group-hover/topbar:pointer-events-auto group-hover/topbar:blur-none' : 'opacity-100 scale-100 blur-none'
       }`}>
         <button 
@@ -38,12 +64,43 @@ export default function TopBar({ hasActiveWindows, time, setIsLauncherOpen, isCa
           className="flex items-center opacity-80 hover:opacity-100 hover:text-primary transition-all cursor-pointer group/search text-sm font-bold uppercase tracking-wider"
         >
           <Search size={22} className="group-hover/search:scale-110 transition-transform mr-4" />
-          <span className="hidden sm:inline text-lg">Spotlight</span>
-          <div className="hidden sm:flex items-center gap-3 ml-6 opacity-80">
-            <kbd className="flex items-center justify-center bg-base-300 border-2 border-white/20 text-base font-black px-3 py-1.5 rounded-lg shadow-sm min-w-[32px]">H</kbd>
-            <kbd className="flex items-center justify-center bg-base-300 border-2 border-white/20 text-base font-black px-3 py-1.5 rounded-lg shadow-sm">Space</kbd>
-          </div>
+          <span className="hidden xl:inline text-lg">Spotlight</span>
         </button>
+
+        <span className="opacity-30">|</span>
+
+        <div className="flex items-center gap-4">
+          <div className="tooltip tooltip-bottom before:text-xs before:font-bold before:uppercase" data-tip="X (Twitter)">
+            <a href="https://x.com/_asad_777" target="_blank" rel="noreferrer" className="opacity-80 hover:opacity-100 hover:text-primary transition-all group/link block">
+              <XIcon size={18} className="group-hover/link:scale-110 transition-transform" />
+            </a>
+          </div>
+          <div className="tooltip tooltip-bottom before:text-xs before:font-bold before:uppercase" data-tip="LinkedIn">
+            <a href="https://www.linkedin.com/in/masadamir" target="_blank" rel="noreferrer" className="opacity-80 hover:opacity-100 hover:text-primary transition-all group/link block">
+              <LinkedinIcon size={18} className="group-hover/link:scale-110 transition-transform" />
+            </a>
+          </div>
+          <div className="tooltip tooltip-bottom before:text-xs before:font-bold before:uppercase" data-tip="GitHub">
+            <a href="https://github.com/asad-777" target="_blank" rel="noreferrer" className="opacity-80 hover:opacity-100 hover:text-primary transition-all group/link block">
+              <GithubIcon size={20} className="group-hover/link:scale-110 transition-transform" />
+            </a>
+          </div>
+          <div className="tooltip tooltip-bottom before:text-xs before:font-bold before:uppercase" data-tip="Portfolio">
+            <a href="https://asadamir.vercel.app" target="_blank" rel="noreferrer" className="opacity-80 hover:opacity-100 hover:text-primary transition-all group/link flex items-center gap-2">
+              <Globe size={18} className="group-hover/link:scale-110 transition-transform" />
+            </a>
+          </div>
+        </div>
+
+        {activeAppName && (
+          <>
+            <span className="opacity-30">|</span>
+            <div className="flex items-center gap-2 font-black text-primary">
+              <ChevronRight size={16} className="opacity-50" />
+              <span className="uppercase text-sm tracking-widest">{activeAppName}</span>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Center: Clock & Date */}
@@ -69,27 +126,52 @@ export default function TopBar({ hasActiveWindows, time, setIsLauncherOpen, isCa
         {isCalendarOpen && <CalendarPopup />}
       </div>
 
-      {/* Right Side: Links */}
-      <div className={`flex items-center gap-2 h-full text-lg  font-bold uppercase tracking-wider pr-2 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+      {/* Right Side: Extras & System Tray */}
+      <div 
+        className={`flex items-center gap-4 h-full pr-2 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
         hasActiveWindows ? 'opacity-0 scale-95 pointer-events-none blur-sm group-hover/topbar:opacity-100 group-hover/topbar:scale-100 group-hover/topbar:pointer-events-auto group-hover/topbar:blur-none' : 'opacity-100 scale-100 blur-none'
       }`}>
-        <a href="https://x.com/_asad_777" target="_blank" rel="noreferrer" className="flex items-center justify-center opacity-80 hover:opacity-100 hover:text-primary transition-all cursor-pointer group/link w-8 h-8">
-          <XIcon size={22} className="group-hover/link:scale-110 transition-transform" />
-        </a>
-        <span className="opacity-30">|</span>
-        <a href="https://www.linkedin.com/in/masadamir" target="_blank" rel="noreferrer" className="flex items-center justify-center opacity-80 hover:opacity-100 hover:text-primary transition-all cursor-pointer group/link w-8 h-8">
-          <LinkedinIcon size={24} className="group-hover/link:scale-110 transition-transform" />
-        </a>
-        <span className="opacity-30">|</span>
-        <a href="https://github.com/asad-777" target="_blank" rel="noreferrer" className="flex items-center justify-center opacity-80 hover:opacity-100 hover:text-primary transition-all cursor-pointer group/link w-8 h-8">
-          <GithubIcon size={26} className="group-hover/link:scale-110 transition-transform" />
-        </a>
-        <span className="opacity-30">|</span>
-        <a href="https://asadamir.vercel.app" target="_blank" rel="noreferrer" className="flex items-center gap-3 opacity-80 hover:opacity-100 hover:text-primary transition-all cursor-pointer group/link ml-2">
-          <Globe size={24} className="group-hover/link:scale-110 transition-transform" />
-          <span className="hidden sm:inline">Portfolio</span>
-        </a>
+        
+        {/* Now Playing */}
+        <div className="hidden lg:flex items-center gap-4 bg-base-300/60 px-4 py-2 rounded-2xl border border-white/10 w-full max-w-[260px] shadow-sm">
+          <Equalizer isPlaying={isPlaying} />
+          <span className="text-xs font-black uppercase truncate opacity-90 flex-1 tracking-wider" title={currentTrack}>
+            {currentTrack.replace('.mp3', '')}
+          </span>
+          <div className="flex items-center gap-2">
+            <button onClick={togglePlay} className="hover:text-primary transition-all hover:scale-110 flex-shrink-0 bg-base-100 p-1.5 rounded-xl border border-white/5 shadow-sm">
+              {isPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
+            </button>
+            <button onClick={nextTrack} className="hover:text-primary transition-all hover:scale-110 flex-shrink-0 bg-base-100 p-1.5 rounded-xl border border-white/5 shadow-sm">
+              <SkipForward size={16} fill="currentColor" />
+            </button>
+          </div>
+        </div>
+
+        {/* Weather */}
+        <div className="hidden md:flex items-center gap-3 bg-base-300/60 px-5 py-2.5 rounded-2xl border border-white/10 text-sm font-bold uppercase opacity-90 shadow-sm">
+          <CloudSun size={20} className="text-warning" />
+          <span>72°F</span>
+        </div>
+
+        {/* System Tray */}
+        <div 
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsControlCenterOpen(!isControlCenterOpen);
+          }}
+          role="button"
+          tabIndex={0}
+          className="flex items-center gap-3 bg-base-300/60 px-4 py-2 rounded-2xl border border-white/10 shadow-sm transition-colors hover:border-primary/50 cursor-pointer"
+        >
+          <div className="flex items-center gap-3 hover:text-primary transition-colors opacity-80">
+            <Volume2 size={18} strokeWidth={2.5} />
+            <Sun size={18} strokeWidth={2.5} />
+          </div>
+        </div>
       </div>
+      
+      {isControlCenterOpen && <ControlCenter />}
     </div>
   );
 }

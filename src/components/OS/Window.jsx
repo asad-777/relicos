@@ -2,12 +2,14 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { useWindowStore } from '@/lib/stores/windowStore';
+import { useContextMenuStore } from '@/lib/stores/contextMenuStore';
 import { X, Minus, Maximize2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function Window({ id, title, type, url, x, y, width, height, isMinimized, isMaximized, isActive, isClosing, isAnimating, zIndex, children }) {
   const windowRef = useRef(null);
   const { focusWindow, updateWindowSize, updateWindowPosition, closeWindow, minimizeWindow, toggleMaximize } = useWindowStore();
+  const { openMenu } = useContextMenuStore();
   const dragRef = useRef({ isDragging: false, startX: 0, startY: 0, initialX: 0, initialY: 0 });
   const [isMounting, setIsMounting] = useState(true);
 
@@ -131,6 +133,16 @@ export default function Window({ id, title, type, url, x, y, width, height, isMi
       <div 
         className="relative flex items-center justify-between bg-base-300/50 text-base-content px-3 py-3 select-none shrink-0 border-b border-white/10"
         onPointerDown={handlePointerDown}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openMenu(e.clientX, e.clientY, [
+            { label: 'Minimize', icon: Minus, onClick: () => minimizeWindow(id) },
+            { label: isMaximized ? 'Restore Down' : 'Maximize', icon: Maximize2, onClick: () => toggleMaximize(id) },
+            { divider: true },
+            { label: 'Close Window', icon: X, onClick: () => closeWindow(id) }
+          ]);
+        }}
       >
         <div className="flex gap-2 items-center group/controls px-1 z-10">
           <button 

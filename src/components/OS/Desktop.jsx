@@ -1,9 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+
 import { useWindowStore } from '@/lib/stores/windowStore';
 import { useWidgetStore } from '@/lib/stores/widgetStore';
 import { useThemeStore, THEMES, BACKGROUNDS } from '@/lib/stores/themeStore';
+import { useContextMenuStore } from '@/lib/stores/contextMenuStore';
+import { useDesktopStore } from '@/lib/stores/desktopStore';
+import { useSystemStore } from '@/lib/stores/systemStore';
 import Window from './Window';
 import AppLauncher from './AppLauncher';
 import Widget from './Widget';
@@ -20,20 +24,28 @@ import { APP_REGISTRY } from '@/lib/appRegistry';
 import { WIDGET_REGISTRY } from '@/lib/widgetRegistry';
 import DesktopIcon from '@/components/OS/DesktopIcon';
 import SystemAudio from '@/components/OS/SystemAudio';
-import { Box } from 'lucide-react';
+import { Box, Settings, LayoutDashboard, Image as ImageIcon, X } from 'lucide-react';
 import TopBar from './TopBar';
+import ContextMenu from './ContextMenu';
 
 export default function Desktop() {
   const { windows, restoreWindow, focusWindow, openWindow, closeWindow } = useWindowStore();
-  const { activeWidgets } = useWidgetStore();
+  const { activeWidgets, addWidget } = useWidgetStore();
   const { theme, background } = useThemeStore();
+  const { openMenu } = useContextMenuStore();
+  const { icons, selectedIconIds, clearSelection, setSelection, addIcon } = useDesktopStore();
+  const { brightness } = useSystemStore();
 
   const [time, setTime] = useState(new Date());
   const [isLauncherOpen, setIsLauncherOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isControlCenterOpen, setIsControlCenterOpen] = useState(false);
+  const [isDockHovered, setIsDockHovered] = useState(false);
+  
+  const [selectionBox, setSelectionBox] = useState(null);
+  const desktopRef = useRef(null);
   const [cpuLoad, setCpuLoad] = useState(12);
   const [ramLoad, setRamLoad] = useState(45);
-  const [isDockHovered, setIsDockHovered] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -83,17 +95,99 @@ export default function Desktop() {
 
   const hasActiveWindows = windows.some(w => !w.isMinimized);
 
+  const handleDesktopContextMenu = (e) => {
+    // Only trigger if clicking directly on the desktop background (not an icon or window)
+    if (e.target.id === 'desktop-bg' || e.target === e.currentTarget) {
+      e.preventDefault();
+      e.stopPropagation();
+      openMenu(e.clientX, e.clientY, [
+        { label: 'Open App Launcher', icon: Box, onClick: () => setIsLauncherOpen(true) },
+        { divider: true },
+        { label: 'Add Clock Widget', icon: LayoutDashboard, onClick: () => addWidget('clock', e.clientX, e.clientY) },
+        { label: 'Add Weather Widget', icon: LayoutDashboard, onClick: () => addWidget('weather', e.clientX + 20, e.clientY + 20) },
+        { divider: true },
+        { label: 'Change Wallpaper', icon: ImageIcon, onClick: () => openWindow({
+          id: APP_REGISTRY.settings.id,
+          title: APP_REGISTRY.settings.title,
+          type: APP_REGISTRY.settings.type,
+          width: APP_REGISTRY.settings.defaultWidth,
+          height: APP_REGISTRY.settings.defaultHeight
+        })}
+      ]);
+    }
+  };
+
+  const handlePointerDown = (e) => {
+    // Only start selection box if clicking on the background itself, left click
+    if (e.button !== 0) return;
+    if (e.target.id === 'desktop-bg' || e.target === e.currentTarget) {
+      clearSelection();
+      setSelectionBox({
+        startX: e.clientX,
+        startY: e.clientY,
+        currentX: e.clientX,
+        currentY: e.clientY
+      });
+      document.addEventListener('pointermove', handlePointerMove);
+      document.addEventListener('pointerup', handlePointerUp);
+    }
+  };
+
+  const handlePointerMove = (e) => {
+    setSelectionBox(prev => {
+      if (!prev) return null;
+      
+      const newBox = { ...prev, currentX: e.clientX, currentY: e.clientY };
+      
+      // Calculate intersection
+      const left = Math.min(newBox.startX, newBox.currentX);
+      const right = Math.max(newBox.startX, newBox.currentX);
+      const top = Math.min(newBox.startY, newBox.currentY);
+      const bottom = Math.max(newBox.startY, newBox.currentY);
+      
+      const boxRect = { left, right, top, bottom };
+      
+      const intersectingIds = [];
+      const iconElements = document.querySelectorAll('[data-icon-id]');
+      
+      iconElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (
+          rect.left < boxRect.right &&
+          rect.right > boxRect.left &&
+          rect.top < boxRect.bottom &&
+          rect.bottom > boxRect.top
+        ) {
+          intersectingIds.push(el.getAttribute('data-icon-id'));
+        }
+      });
+      
+      setSelection(intersectingIds);
+      
+      return newBox;
+    });
+  };
+
+  const handlePointerUp = () => {
+    setSelectionBox(null);
+    document.removeEventListener('pointermove', handlePointerMove);
+    document.removeEventListener('pointerup', handlePointerUp);
+  };
+
   return (
     <div 
       className="relative w-full h-screen overflow-hidden flex flex-col bg-cover bg-center transition-all duration-700"
       style={{ backgroundImage: `url('/wallpapers/${BACKGROUNDS.includes(background) ? background : BACKGROUNDS[0]}.png')` }}
     >
+      <ContextMenu />
       <TopBar 
         hasActiveWindows={hasActiveWindows} 
         time={time} 
         setIsLauncherOpen={setIsLauncherOpen} 
         isCalendarOpen={isCalendarOpen} 
         setIsCalendarOpen={setIsCalendarOpen} 
+        isControlCenterOpen={isControlCenterOpen}
+        setIsControlCenterOpen={setIsControlCenterOpen}
       />
 
 
@@ -129,6 +223,11 @@ export default function Desktop() {
             return (
               <DockIcon
                 key={app.id}
+                draggable
+                onDragStart={(e) => {
+                  e.dataTransfer.setData('relicos/appId', app.id);
+                  e.dataTransfer.effectAllowed = 'copy';
+                }}
                 onClick={() => {
                   if (isOpen) {
                     if (w.isMinimized) restoreWindow(w.id);
@@ -146,7 +245,17 @@ export default function Desktop() {
                 onContextMenu={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  if (isOpen) closeWindow(app.id);
+                  const items = [
+                    { label: isOpen ? 'Focus App' : 'Open App', icon: app.icon, onClick: () => {
+                      if (isOpen) focusWindow(w.id);
+                      else openWindow({ id: app.id, title: app.title, type: app.type, width: app.defaultWidth, height: app.defaultHeight });
+                    }}
+                  ];
+                  if (isOpen) {
+                    items.push({ divider: true });
+                    items.push({ label: 'Force Quit', icon: X, onClick: () => closeWindow(app.id) });
+                  }
+                  openMenu(e.clientX, e.clientY - 100, items);
                 }}
                 className={`border-2 rounded-2xl relative group transition-colors duration-300 ${stateClass}`}
               >
@@ -163,7 +272,7 @@ export default function Desktop() {
 
           {/* Separator if there are open windows not in registry */}
           {windows.filter(w => !Object.values(APP_REGISTRY).some(app => app.id === w.id)).length > 0 && (
-            <div className="w-px h-8 bg-white/20 mx-2"></div>
+            <div key="dock-separator" className="w-px h-8 bg-white/20 mx-2"></div>
           )}
 
           {/* Render open windows that are NOT in APP_REGISTRY (e.g. Games) */}
@@ -207,12 +316,48 @@ export default function Desktop() {
       <SystemAudio />
 
       {/* Desktop Area */}
-      <div className="relative flex-1 w-full"
+      <div 
+        id="desktop-bg"
+        ref={desktopRef}
+        className="relative flex-1 w-full"
+        onContextMenu={handleDesktopContextMenu}
+        onPointerDown={handlePointerDown}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'copy';
+        }}
+        onDrop={(e) => {
+          e.preventDefault();
+          const appId = e.dataTransfer.getData('relicos/appId');
+          if (appId) {
+            // center the icon on drop
+            addIcon(appId, e.clientX - 48, e.clientY - 48);
+          }
+        }}
         onClick={() => {
           setIsLauncherOpen(false);
           setIsCalendarOpen(false);
+          setIsControlCenterOpen(false);
         }}
       >
+        {/* Selection Box */}
+        {selectionBox && (
+          <div 
+            className="absolute bg-primary/20 border border-primary pointer-events-none z-[50]"
+            style={{
+              left: Math.min(selectionBox.startX, selectionBox.currentX),
+              top: Math.min(selectionBox.startY, selectionBox.currentY) - 64, // offset top bar height since container is below it
+              width: Math.abs(selectionBox.currentX - selectionBox.startX),
+              height: Math.abs(selectionBox.currentY - selectionBox.startY)
+            }}
+          />
+        )}
+
+        {/* Desktop Icons */}
+        {icons.map(instance => (
+          <DesktopIcon key={instance.instanceId} instance={instance} />
+        ))}
+
         {/* Draggable Desktop Widgets */}
         <div className="absolute inset-0 pointer-events-none z-0">
           {activeWidgets.map(widgetInstance => {
@@ -241,13 +386,14 @@ export default function Desktop() {
           return (
             <Window key={w.id} {...w} isActive={isActive}>
               {w.type === 'settings' && (
-                <SettingsApp />
+                <SettingsApp key="settings" />
               )}
             {w.type === 'directory' && (
-              <GameDirectory />
+              <GameDirectory key="directory" />
             )}
             {w.type === 'iframe' && (
               <iframe 
+                key="iframe"
                 src={w.url} 
                 className="w-full h-full border-none rounded-b-xl" 
                 allow="autoplay; fullscreen" 
@@ -255,26 +401,33 @@ export default function Desktop() {
             )}
 
             {w.type === 'calculator' && (
-              <CalculatorApp />
+              <CalculatorApp key="calculator" />
             )}
             {w.type === 'music' && (
-              <MusicPlayer />
+              <MusicPlayer key="music" />
             )}
             {w.type === 'widgets' && (
-              <WidgetApp />
+              <WidgetApp key="widgets" />
             )}
             {w.type === 'browser' && (
-              <BrowserApp />
+              <BrowserApp key="browser" />
             )}
             {w.type === 'youtube' && (
-              <YoutubeApp />
+              <YoutubeApp key="youtube" />
             )}
           </Window>
           );
         })}
+
       </div>
 
       <AppLauncher isOpen={isLauncherOpen} onClose={() => setIsLauncherOpen(false)} />
+      
+      {/* Brightness Overlay */}
+      <div 
+        className="absolute inset-0 bg-black pointer-events-none z-[999999] transition-opacity duration-300"
+        style={{ opacity: (100 - brightness) / 100 * 0.8 }} 
+      />
     </div>
   );
 }
