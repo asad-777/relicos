@@ -57,8 +57,26 @@ export default function Widget({ instanceId, initialX = 100, initialY = 100, ini
     const dx = e.clientX - dragRef.current.startX;
     const dy = e.clientY - dragRef.current.startY;
     
-    const newX = dragRef.current.initialX + dx;
-    const newY = Math.max(0, dragRef.current.initialY + dy); // Prevent dragging off top
+    let newX = dragRef.current.initialX + dx;
+    let newY = dragRef.current.initialY + dy;
+
+    if (widgetRef.current && typeof window !== 'undefined') {
+      const w = widgetRef.current.offsetWidth;
+      const h = widgetRef.current.offsetHeight;
+      
+      // Sides: 50% can go off-screen
+      const minX = -(w * 0.5);
+      const maxX = window.innerWidth - (w * 0.5);
+      
+      // Top/Bottom: 20% can go off-screen
+      const minY = -(h * 0.2);
+      const maxY = window.innerHeight - (h * 0.8);
+
+      newX = Math.max(minX, Math.min(newX, maxX));
+      newY = Math.max(minY, Math.min(newY, maxY));
+    } else {
+      newY = Math.max(0, newY); // Fallback
+    }
 
     // We don't save to global store on every move to avoid performance issues,
     // just update state

@@ -32,6 +32,7 @@ export default function Desktop() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [cpuLoad, setCpuLoad] = useState(12);
   const [ramLoad, setRamLoad] = useState(45);
+  const [isDockHovered, setIsDockHovered] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -95,8 +96,19 @@ export default function Desktop() {
       />
 
 
-      {/* Bottom Floating Task List (MagicUI Dock) */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-9999">
+      {/* Bottom Floating Task List (MagicUI Dock) - Auto Hiding */}
+      <div 
+        className="absolute bottom-0 left-0 w-full h-8 z-[9999]" 
+        onMouseEnter={() => setIsDockHovered(true)}
+      ></div>
+
+      <div 
+        className={`absolute bottom-4 left-1/2 -translate-x-1/2 z-[9999] transition-transform duration-500 ease-out ${
+          isDockHovered || !hasActiveWindows ? 'translate-y-0' : 'translate-y-[75%]'
+        }`}
+        onMouseEnter={() => setIsDockHovered(true)}
+        onMouseLeave={() => setIsDockHovered(false)}
+      >
         <Dock direction="middle" iconSize={80} iconMagnification={110} iconDistance={150} className="bg-base-200/20 backdrop-blur-2xl border-2 border-white/10 shadow-2xl mx-auto mt-0 h-auto py-4 px-6 flex gap-6 rounded-3xl">
           {Object.values(APP_REGISTRY).map((app) => {
             const w = windows.find(win => win.id === app.id);
