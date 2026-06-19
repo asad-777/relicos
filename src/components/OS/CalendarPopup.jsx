@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'pixelarticons/react';
 
 export default function CalendarPopup() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -51,7 +51,7 @@ export default function CalendarPopup() {
         {/* Cover line to hide the calendar's left border where they connect */}
         <div className="absolute -right-[2px] top-0 bottom-0 w-[2px] bg-base-300 pointer-events-none"></div>
 
-        <div className="overflow-y-auto overflow-x-hidden h-full p-2 flex flex-col gap-1 overscroll-contain" ref={monthListRef}>
+        <div className="overflow-y-auto overflow-x-hidden h-full p-2 flex flex-col gap-1 overscroll-contain" ref={monthListRef} data-lenis-prevent="true">
           {monthNames.map((month, idx) => (
             <button
               key={month}

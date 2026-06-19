@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Search } from 'lucide-react';
+import { Search } from 'pixelarticons/react';
 import { useWindowStore } from '@/lib/stores/windowStore';
 
 import { APP_REGISTRY } from '@/lib/appRegistry';
@@ -56,13 +56,13 @@ export default function AppLauncher({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-start justify-center pt-[20vh] bg-black/30 backdrop-blur-md transition-all duration-200 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={onClose}>
+    <div className={`fixed inset-0 z-50 flex items-start justify-center pt-[20vh] bg-base-content/30 backdrop-blur-md transition-all duration-200 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={onClose}>
       <div 
-        className="w-[90%] max-w-2xl bg-base-100/90 backdrop-blur-2xl border border-white/20 shadow-[0_30px_60px_rgba(0,0,0,0.5)] rounded-2xl flex flex-col overflow-hidden transform transition-transform duration-200"
+        className="w-[90%] max-w-2xl bg-base-100/90 backdrop-blur-2xl border border-base-content/20 shadow-2xl shadow-base-content/50 rounded-2xl flex flex-col overflow-hidden transform transition-transform duration-200"
         style={{ transform: isOpen ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-20px)' }}
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center gap-4 p-5 border-b border-white/10 bg-base-200/30">
+        <div className="flex items-center gap-4 p-5 border-b border-base-content/10 bg-base-200/30">
           <Search size={28} className="text-base-content/50" />
           <input
             ref={inputRef}
@@ -78,7 +78,7 @@ export default function AppLauncher({ isOpen, onClose }) {
             </button>
           )}
         </div>
-        <div className="max-h-[50vh] overflow-y-auto p-3 flex flex-col gap-1">
+        <div className="max-h-[50vh] overflow-y-auto p-3 flex flex-col gap-1" data-lenis-prevent="true">
           {filteredApps.length > 0 ? filteredApps.map((app, index) => (
             <div
               key={app.id}

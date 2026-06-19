@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { useWindowStore } from '@/lib/stores/windowStore';
 import { useContextMenuStore } from '@/lib/stores/contextMenuStore';
-import { X, Minus, Maximize2 } from 'lucide-react';
+import { Close, Minus, Expand } from 'pixelarticons/react';
 import { cn } from '@/lib/utils';
 
 export default function Window({ id, title, type, url, x, y, width, height, isMinimized, isMaximized, isActive, isClosing, isAnimating, zIndex, children }) {
@@ -113,7 +113,7 @@ export default function Window({ id, title, type, url, x, y, width, height, isMi
       ref={windowRef}
       onPointerDown={() => focusWindow(id)}
       className={cn(
-        "fixed flex flex-col bg-base-100 rounded-(--radius-window) border border-white/20 shadow-2xl overflow-hidden",
+        "fixed flex flex-col bg-base-100 rounded-(--radius-window) border border-base-content/20 shadow-2xl overflow-hidden",
         isAnimating 
           ? "transition-[opacity,transform,filter,width,height,left,top] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" 
           : "transition-[opacity,transform,filter] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
@@ -131,7 +131,7 @@ export default function Window({ id, title, type, url, x, y, width, height, isMi
     >
       {/* Title Bar */}
       <div 
-        className="relative flex items-center justify-between bg-base-300/50 text-base-content px-3 py-3 select-none shrink-0 border-b border-white/10"
+        className="relative flex items-center justify-between bg-base-300/50 text-base-content px-3 py-3 select-none shrink-0 border-b border-base-content/10"
         onPointerDown={handlePointerDown}
         onContextMenu={(e) => {
           e.preventDefault();
@@ -150,21 +150,21 @@ export default function Window({ id, title, type, url, x, y, width, height, isMi
             className="w-4 h-4 rounded-full bg-[#FF5F56] border border-[#E0443E] hover:brightness-90 flex items-center justify-center transition-all cursor-default"
             title="Close"
           >
-            <X size={10} className="text-black/60 opacity-0 group-hover/controls:opacity-100 transition-opacity" strokeWidth={3} />
+            <Close size={10} className="text-base-content/60 opacity-0 group-hover/controls:opacity-100 transition-opacity" strokeWidth={3} />
           </button>
           <button 
             onClick={(e) => { e.stopPropagation(); minimizeWindow(id); }}
             className="w-4 h-4 rounded-full bg-[#FFBD2E] border border-[#DEA123] hover:brightness-90 flex items-center justify-center transition-all cursor-default"
             title="Minimize"
           >
-            <Minus size={10} className="text-black/60 opacity-0 group-hover/controls:opacity-100 transition-opacity" strokeWidth={4} />
+            <Minus size={10} className="text-base-content/60 opacity-0 group-hover/controls:opacity-100 transition-opacity" strokeWidth={4} />
           </button>
           <button 
             onClick={(e) => { e.stopPropagation(); toggleMaximize(id); }}
             className="w-4 h-4 rounded-full bg-[#27C93F] border border-[#1AAB29] hover:brightness-90 flex items-center justify-center transition-all cursor-default"
             title="Maximize"
           >
-            <Maximize2 size={9} className="text-black/60 opacity-0 group-hover/controls:opacity-100 transition-opacity" strokeWidth={3} />
+            <Expand size={9} className="text-base-content/60 opacity-0 group-hover/controls:opacity-100 transition-opacity" strokeWidth={3} />
           </button>
         </div>
         

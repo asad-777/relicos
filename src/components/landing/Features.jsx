@@ -1,4 +1,4 @@
-import { MonitorPlay, LayoutTemplate, Palette } from "lucide-react";
+import { Monitor, Grid3x3, Brush } from 'pixelarticons/react';
 
 export function Features() {
   return (
@@ -13,17 +13,17 @@ export function Features() {
 
         <div className="grid md:grid-cols-3 gap-8">
           <FeatureCard 
-            icon={<LayoutTemplate size={48} />}
+            icon={<Grid3x3 size={48} />}
             title="Window Manager"
             desc="A fully functional desktop environment in your browser. Drag, resize, and multitask like it's 1999."
           />
           <FeatureCard 
-            icon={<MonitorPlay size={48} />}
+            icon={<Monitor size={48} />}
             title="Curated Library"
             desc="Discover hand-picked web-based indie games from itch.io. No downloads, no installations, just play."
           />
           <FeatureCard 
-            icon={<Palette size={48} />}
+            icon={<Brush size={48} />}
             title="Retro Themes"
             desc="Swap between authentic Game Boy inspired color palettes or create your own custom theme."
           />

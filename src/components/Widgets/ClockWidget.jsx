@@ -7,7 +7,7 @@ export default function ClockWidget({ instanceId, initialX = 64, initialY = 200,
 
   return (
     <Widget instanceId={instanceId} initialX={initialX} initialY={initialY} initialWidth={initialWidth} initialHeight={initialHeight} preview={preview}>
-      <div className="bg-base-200/50 backdrop-blur-xl p-6 rounded-[var(--radius-widget)] border-2 border-white/10 w-full h-full min-w-[250px] min-h-[180px] text-base-content drop-shadow-md transition-all duration-300">
+      <div className="bg-base-200/50 backdrop-blur-xl p-6 rounded-[var(--radius-widget)] border-2 border-base-content/10 w-full h-full min-w-[250px] min-h-[180px] text-base-content drop-shadow-md transition-all duration-300">
         <p className="text-2xl font-bold opacity-80 uppercase tracking-widest">
           {time.toLocaleDateString('en-US', { weekday: 'long' })}
         </p>

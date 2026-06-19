@@ -2,7 +2,7 @@
 
 import Widget from '../OS/Widget';
 import { useMusicStore, TRACKS } from '@/lib/stores/musicStore';
-import { Play, Pause, SkipBack, SkipForward, Music } from 'lucide-react';
+import { Play, Square, ArrowLeft, ArrowRight, Music } from 'pixelarticons/react';
 
 export default function MusicWidget({ instanceId, initialX = 64, initialY = 500, initialWidth, initialHeight, preview }) {
   const { 
@@ -20,7 +20,7 @@ export default function MusicWidget({ instanceId, initialX = 64, initialY = 500,
   
   return (
     <Widget instanceId={instanceId} initialX={initialX} initialY={initialY} initialWidth={initialWidth} initialHeight={initialHeight} preview={preview}>
-      <div className="bg-base-200/80 backdrop-blur-xl p-5 rounded-[var(--radius-widget)] border-2 border-white/10 w-full min-w-[280px] h-full min-h-[160px] flex flex-col justify-between text-base-content drop-shadow-md">
+      <div className="bg-base-200/80 backdrop-blur-xl p-5 rounded-[var(--radius-widget)] border-2 border-base-content/10 w-full min-w-[280px] h-full min-h-[160px] flex flex-col justify-between text-base-content drop-shadow-md">
         <div className="flex items-center gap-4 mb-5">
           <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center text-primary border-2 border-primary/30">
             <Music size={28} />
@@ -32,22 +32,22 @@ export default function MusicWidget({ instanceId, initialX = 64, initialY = 500,
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full h-2.5 bg-base-300 rounded-full overflow-hidden mb-5 border border-white/5">
+        <div className="w-full h-2.5 bg-base-300 rounded-full overflow-hidden mb-5 border border-base-content/5">
           <div className="h-full bg-primary transition-all duration-1000 linear" style={{ width: `${progressPercent}%` }} />
         </div>
 
         {/* Controls */}
         <div className="flex items-center justify-center gap-8 px-2">
           <button onClick={prevTrack} className="opacity-70 hover:opacity-100 hover:scale-110 hover:text-primary transition-all pointer-events-auto">
-            <SkipBack size={24} fill="currentColor" />
+            <ArrowLeft size={24} fill="currentColor" />
           </button>
           
           <button onClick={togglePlay} className="w-12 h-12 rounded-full bg-primary text-primary-content flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(var(--color-primary),0.5)] pointer-events-auto">
-            {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" className="ml-1" />}
+            {isPlaying ? <Square size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" className="ml-1" />}
           </button>
           
           <button onClick={nextTrack} className="opacity-70 hover:opacity-100 hover:scale-110 hover:text-primary transition-all pointer-events-auto">
-            <SkipForward size={24} fill="currentColor" />
+            <ArrowRight size={24} fill="currentColor" />
           </button>
         </div>
       </div>

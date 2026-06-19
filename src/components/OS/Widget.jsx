@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { useWidgetStore } from '@/lib/stores/widgetStore';
-import { X } from 'lucide-react';
+import { Close } from 'pixelarticons/react';
 
 export default function Widget({ instanceId, initialX = 100, initialY = 100, initialWidth = 'auto', initialHeight = 'auto', preview = false, children }) {
   const [pos, setPos] = useState({ x: initialX, y: initialY, width: initialWidth, height: initialHeight });
@@ -140,7 +140,7 @@ export default function Widget({ instanceId, initialX = 100, initialY = 100, ini
       }}
     >
       {/* Draggable overlay handle that shows on hover */}
-      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-12 h-1.5 rounded-full bg-white/40 opacity-0 group-hover/widget:opacity-100 transition-opacity backdrop-blur-md cursor-move z-50"></div>
+      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-12 h-1.5 rounded-full bg-base-content/40 opacity-0 group-hover/widget:opacity-100 transition-opacity backdrop-blur-md cursor-move z-50"></div>
       
       {/* Remove Button */}
       <button 
@@ -148,10 +148,10 @@ export default function Widget({ instanceId, initialX = 100, initialY = 100, ini
           e.stopPropagation();
           removeWidget(instanceId);
         }}
-        className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full bg-error/90 text-error-content opacity-0 group-hover/widget:opacity-100 hover:bg-error transition-all z-[60] cursor-pointer shadow-md border border-white/20 hover:scale-110"
+        className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full bg-error/90 text-error-content opacity-0 group-hover/widget:opacity-100 hover:bg-error transition-all z-[60] cursor-pointer shadow-md border border-base-content/20 hover:scale-110"
         title="Remove Widget"
       >
-        <X size={14} strokeWidth={3} />
+        <Close size={14} strokeWidth={3} />
       </button>
 
       {children}

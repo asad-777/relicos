@@ -24,7 +24,7 @@ import { APP_REGISTRY } from '@/lib/appRegistry';
 import { WIDGET_REGISTRY } from '@/lib/widgetRegistry';
 import DesktopIcon from '@/components/OS/DesktopIcon';
 import SystemAudio from '@/components/OS/SystemAudio';
-import { Box, Settings, LayoutDashboard, Image as ImageIcon, X } from 'lucide-react';
+import { Box, SettingsCog, Grid2x22, Image, Close } from 'pixelarticons/react';
 import TopBar from './TopBar';
 import ContextMenu from './ContextMenu';
 
@@ -103,10 +103,10 @@ export default function Desktop() {
       openMenu(e.clientX, e.clientY, [
         { label: 'Open App Launcher', icon: Box, onClick: () => setIsLauncherOpen(true) },
         { divider: true },
-        { label: 'Add Clock Widget', icon: LayoutDashboard, onClick: () => addWidget('clock', e.clientX, e.clientY) },
-        { label: 'Add Weather Widget', icon: LayoutDashboard, onClick: () => addWidget('weather', e.clientX + 20, e.clientY + 20) },
+        { label: 'Add Clock Widget', icon: Box, onClick: () => addWidget('clock', e.clientX, e.clientY) },
+        { label: 'Add Weather Widget', icon: Box, onClick: () => addWidget('weather', e.clientX + 20, e.clientY + 20) },
         { divider: true },
-        { label: 'Change Wallpaper', icon: ImageIcon, onClick: () => openWindow({
+        { label: 'Change Wallpaper', icon: Image, onClick: () => openWindow({
           id: APP_REGISTRY.settings.id,
           title: APP_REGISTRY.settings.title,
           type: APP_REGISTRY.settings.type,
@@ -204,7 +204,7 @@ export default function Desktop() {
         onMouseEnter={() => setIsDockHovered(true)}
         onMouseLeave={() => setIsDockHovered(false)}
       >
-        <Dock direction="middle" iconSize={80} iconMagnification={110} iconDistance={150} className="bg-base-200/20 backdrop-blur-2xl border-2 border-white/10 shadow-2xl mx-auto mt-0 h-auto py-4 px-6 flex gap-6 rounded-3xl">
+        <Dock direction="middle" iconSize={80} iconMagnification={110} iconDistance={150} className="bg-base-200/20 backdrop-blur-2xl border-2 border-base-content/10 shadow-2xl mx-auto mt-0 h-auto py-4 px-6 flex gap-6 rounded-3xl">
           {Object.values(APP_REGISTRY).map((app) => {
             const w = windows.find(win => win.id === app.id);
             const isOpen = !!w;
@@ -217,7 +217,7 @@ export default function Desktop() {
             } else if (isOpen) {
               stateClass = 'bg-base-200 border-primary/60 font-bold text-base-content';
             } else {
-              stateClass = 'bg-base-200/80 border-white/10 text-base-content hover:bg-base-100 hover:border-white/30';
+              stateClass = 'bg-base-200/80 border-base-content/10 text-base-content hover:bg-base-100 hover:border-base-content/30';
             }
 
             return (
@@ -253,14 +253,14 @@ export default function Desktop() {
                   ];
                   if (isOpen) {
                     items.push({ divider: true });
-                    items.push({ label: 'Force Quit', icon: X, onClick: () => closeWindow(app.id) });
+                    items.push({ label: 'Force Quit', icon: Close, onClick: () => closeWindow(app.id) });
                   }
                   openMenu(e.clientX, e.clientY - 100, items);
                 }}
                 className={`border-2 rounded-2xl relative group transition-colors duration-300 ${stateClass}`}
               >
                 <div className="flex items-center justify-center w-full h-full">
-                  {Icon ? <Icon size={32} color={app.color} /> : <span className="text-lg font-black uppercase text-center">{app.title.slice(0, 3)}</span>}
+                  {Icon ? <Icon className="w-full h-full p-2" color={app.color} /> : <span className="text-lg font-black uppercase text-center">{app.title.slice(0, 3)}</span>}
                 </div>
                 {/* Tooltip */}
                 <div className="absolute -top-14 left-1/2 -translate-x-1/2 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-base-200 text-base-content font-black text-sm px-4 py-2 rounded-xl border-2 border-base-content shadow-[4px_4px_0px_var(--color-base-content)] pointer-events-none whitespace-nowrap z-50">
@@ -272,7 +272,7 @@ export default function Desktop() {
 
           {/* Separator if there are open windows not in registry */}
           {windows.filter(w => !Object.values(APP_REGISTRY).some(app => app.id === w.id)).length > 0 && (
-            <div key="dock-separator" className="w-px h-8 bg-white/20 mx-2"></div>
+            <div key="dock-separator" className="w-px h-8 bg-base-content/20 mx-2"></div>
           )}
 
           {/* Render open windows that are NOT in APP_REGISTRY (e.g. Games) */}
@@ -301,7 +301,7 @@ export default function Desktop() {
                 className={`border-2 rounded-2xl relative group transition-colors duration-300 ${stateClass}`}
               >
                 <div className="flex items-center justify-center w-full h-full">
-                  <Box size={32} />
+                  <Box className="w-full h-full p-2 text-base-content/70" />
                 </div>
                 {/* Tooltip */}
                 <div className="absolute -top-14 left-1/2 -translate-x-1/2 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-base-200 text-base-content font-black text-sm px-4 py-2 rounded-xl border-2 border-base-content shadow-[4px_4px_0px_var(--color-base-content)] pointer-events-none whitespace-nowrap z-50">
@@ -425,7 +425,7 @@ export default function Desktop() {
       
       {/* Brightness Overlay */}
       <div 
-        className="absolute inset-0 bg-black pointer-events-none z-[999999] transition-opacity duration-300"
+        className="absolute inset-0 bg-base-300 pointer-events-none z-[999999] transition-opacity duration-300"
         style={{ opacity: (100 - brightness) / 100 * 0.8 }} 
       />
     </div>

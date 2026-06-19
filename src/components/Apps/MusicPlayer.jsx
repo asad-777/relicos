@@ -2,7 +2,7 @@
 
 import { useMusicStore, TRACKS } from '@/lib/stores/musicStore';
 import BaseApp from './BaseApp';
-import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Music as MusicIcon } from 'lucide-react';
+import { Play, Square, ArrowRight, ArrowLeft, Volume3, Volume, Music } from 'pixelarticons/react';
 
 export default function MusicPlayer() {
   const { 
@@ -48,7 +48,7 @@ export default function MusicPlayer() {
               <div className="w-3 bg-primary rounded-full animate-bounce h-1/2" style={{ animationDelay: '600ms' }}></div>
             </div>
           ) : (
-            <MusicIcon size={64} className="opacity-50 text-base-content" />
+            <Music size={64} className="opacity-50 text-base-content" />
           )}
         </div>
 
@@ -80,28 +80,28 @@ export default function MusicPlayer() {
             onClick={toggleMute}
             className="p-3 rounded-full hover:bg-base-200 transition-colors opacity-70 hover:opacity-100"
           >
-            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+            {isMuted ? <Volume size={20} /> : <Volume3 size={20} />}
           </button>
           
           <button 
             onClick={prevTrack}
             className="p-4 rounded-full bg-base-200 hover:bg-base-300 transition-colors shadow-md active:scale-95"
           >
-            <SkipBack size={24} className="fill-current" />
+            <ArrowLeft size={24} className="fill-current" />
           </button>
 
           <button 
             onClick={togglePlay}
             className="p-6 rounded-full bg-primary text-primary-content hover:brightness-110 transition-all shadow-[4px_4px_0px_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[0px_0px_0px_rgba(0,0,0,0.5)]"
           >
-            {isPlaying ? <Pause size={32} className="fill-current" /> : <Play size={32} className="fill-current ml-1" />}
+            {isPlaying ? <Square size={32} className="fill-current" /> : <Play size={32} className="fill-current ml-1" />}
           </button>
 
           <button 
             onClick={nextTrack}
             className="p-4 rounded-full bg-base-200 hover:bg-base-300 transition-colors shadow-md active:scale-95"
           >
-            <SkipForward size={24} className="fill-current" />
+            <ArrowRight size={24} className="fill-current" />
           </button>
         </div>
       </div>

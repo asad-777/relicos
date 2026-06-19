@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, RotateCw, Globe, Plus, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Reload, Globe, Plus, Close, ChevronLeft, ChevronRight } from 'pixelarticons/react';
 import { useBrowserStore } from '@/lib/stores/browserStore';
 
 export default function BrowserApp() {
@@ -92,7 +92,7 @@ export default function BrowserApp() {
                 onClick={(e) => { e.stopPropagation(); closeTab(tab.id); }}
                 className={`p-0.5 rounded-full hover:bg-base-content/20 ${activeTabId === tab.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
               >
-                <X size={12} />
+                <Close size={12} />
               </button>
             </div>
           ))}
@@ -121,7 +121,7 @@ export default function BrowserApp() {
               }}
               className="p-1.5 rounded hover:bg-base-content/20 active:scale-95 transition-all"
             >
-              <RotateCw size={16} className={isLoading ? "animate-spin" : ""} />
+              <Reload size={16} className={isLoading ? "animate-spin" : ""} />
             </button>
           </div>
           
@@ -138,7 +138,7 @@ export default function BrowserApp() {
         </div>
         
         {/* Browser Content */}
-        <div className="flex-1 relative bg-white overflow-hidden">
+        <div className="flex-1 relative bg-base-100 overflow-hidden">
           {activeTab.type === 'search' ? (
             <div className="w-full h-full bg-base-100 overflow-y-auto p-6 md:p-10" data-lenis-prevent="true">
               {!activeTab.query ? (
@@ -149,10 +149,10 @@ export default function BrowserApp() {
                 </div>
               ) : isLoading ? (
                 <div className="flex items-center justify-center pt-20">
-                  <RotateCw size={32} className="animate-spin text-primary opacity-50" />
+                  <Reload size={32} className="animate-spin text-primary opacity-50" />
                 </div>
               ) : searchError ? (
-                <div className="text-red-500 font-bold p-4 bg-red-500/10 rounded-lg">{searchError}</div>
+                <div className="text-error font-bold p-4 bg-error/10 rounded-lg">{searchError}</div>
               ) : searchResults?.length === 0 ? (
                 <div className="font-bold text-xl opacity-60 pt-10 text-center">No results found.</div>
               ) : (
@@ -176,7 +176,7 @@ export default function BrowserApp() {
             <iframe
               id={`iframe-${activeTab.id}`}
               src={activeTab.url}
-              className="w-full h-full border-none absolute inset-0 bg-white"
+              className="w-full h-full border-none absolute inset-0 bg-base-100"
               title="Browser Content"
             />
           )}

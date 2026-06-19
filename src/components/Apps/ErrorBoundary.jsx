@@ -18,7 +18,7 @@ export class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="p-4 bg-red-900 text-white h-full overflow-auto">
+        <div className="p-4 bg-error text-error-content text-base-content h-full overflow-auto">
           <h1 className="font-bold text-xl mb-2">BrowserApp Crashed</h1>
           <pre className="text-xs whitespace-pre-wrap">{this.state.error?.stack || this.state.error?.toString()}</pre>
         </div>

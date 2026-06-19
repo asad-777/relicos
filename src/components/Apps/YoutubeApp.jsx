@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, PlaySquare, Play, X, Video, ArrowLeft, Loader2 } from 'lucide-react';
+import { Search, Video, Play, Close, ArrowLeft, Loader } from 'pixelarticons/react';
 
 export default function YoutubeApp() {
   const [view, setView] = useState('home'); // 'home', 'results', 'player'
@@ -75,20 +75,20 @@ export default function YoutubeApp() {
       
       {/* Top Bar (Only visible when NOT on home screen) */}
       {view !== 'home' && (
-        <div className="flex items-center bg-[#FF0000] text-white p-2 gap-2 shrink-0 shadow-md z-10">
+        <div className="flex items-center bg-[#FF0000] text-base-content p-2 gap-2 shrink-0 shadow-md z-10">
           <button 
             onClick={goBack}
-            className="p-1.5 hover:bg-black/20 rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 hover:bg-base-content/20 rounded-lg transition-colors cursor-pointer"
             title="Go Back"
           >
             <ArrowLeft size={18} />
           </button>
           <div className="flex items-center font-bold">
-            <PlaySquare size={20} className="mr-1" />
+            <Video size={20} className="mr-1" />
             <span className="hidden sm:inline">YouTube</span>
           </div>
           
-          <form onSubmit={handleSearch} className="flex-1 flex items-center bg-white text-black rounded-sm overflow-hidden px-2 h-8 ml-2 shadow-inner max-w-md">
+          <form onSubmit={handleSearch} className="flex-1 flex items-center bg-base-100 text-base-content rounded-sm overflow-hidden px-2 h-8 ml-2 shadow-inner max-w-md">
             <Search size={14} className="opacity-50 mr-2 shrink-0" />
             <input
               type="text"
@@ -99,7 +99,7 @@ export default function YoutubeApp() {
             />
             {inputValue && (
               <button type="button" onClick={() => setInputValue('')} className="opacity-50 hover:opacity-100 p-1">
-                <X size={14} />
+                <Close size={14} />
               </button>
             )}
           </form>
@@ -107,13 +107,13 @@ export default function YoutubeApp() {
       )}
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto bg-base-200 relative">
+      <div className="flex-1 overflow-y-auto bg-base-200 relative" data-lenis-prevent="true">
         
         {/* VIEW: HOME */}
         {view === 'home' && (
           <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-base-200">
             <div className="flex items-center gap-3 mb-8 text-[#FF0000]">
-              <PlaySquare size={64} strokeWidth={1.5} />
+              <Video size={64} strokeWidth={1.5} />
               <h1 className="text-5xl font-black tracking-tighter">YouTube</h1>
             </div>
             
@@ -146,7 +146,7 @@ export default function YoutubeApp() {
 
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-20 opacity-50">
-                <Loader2 size={48} className="animate-spin mb-4" />
+                <Loader size={48} className="animate-spin mb-4" />
                 <p className="font-bold">Searching YouTube...</p>
               </div>
             ) : (
@@ -157,9 +157,9 @@ export default function YoutubeApp() {
                     onClick={() => playVideo(video)}
                     className="flex flex-col sm:flex-row gap-4 group cursor-pointer bg-base-100 p-2 border-2 border-transparent hover:border-base-content/20 rounded-xl transition-all"
                   >
-                    <div className="relative w-full sm:w-64 aspect-video bg-black rounded-lg overflow-hidden shrink-0">
+                    <div className="relative w-full sm:w-64 aspect-video bg-base-300 rounded-lg overflow-hidden shrink-0">
                       <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                      <div className="absolute bottom-1 right-1 bg-black/80 text-white text-xs font-bold px-1.5 py-0.5 rounded">
+                      <div className="absolute bottom-1 right-1 bg-base-content/80 text-base-content text-xs font-bold px-1.5 py-0.5 rounded">
                         {video.duration}
                       </div>
                     </div>
@@ -177,7 +177,7 @@ export default function YoutubeApp() {
 
         {/* VIEW: PLAYER */}
         {view === 'player' && activeVideo && (
-          <div className="flex flex-col h-full bg-black animate-in fade-in duration-300">
+          <div className="flex flex-col h-full bg-base-300 animate-in fade-in duration-300">
             <div className="w-full h-full relative">
               <iframe
                 src={`https://www.youtube.com/embed/${activeVideo.id}?autoplay=1`}

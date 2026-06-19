@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useWidgetStore } from '@/lib/stores/widgetStore';
 import { WIDGET_REGISTRY } from '@/lib/widgetRegistry';
-import { Plus } from 'lucide-react';
+import { Plus } from 'pixelarticons/react';
 
 export default function WidgetApp() {
   const { addWidget } = useWidgetStore();

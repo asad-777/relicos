@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useThemeStore, THEMES, BACKGROUNDS } from '@/lib/stores/themeStore';
-import { Monitor, Image as ImageIcon, LayoutTemplate, Square, Circle } from 'lucide-react';
+import { Monitor, Image, Grid3x3, Square, Circle } from 'pixelarticons/react';
 
 export default function Settings() {
   const { theme, setTheme, background, setBackground, corners, setCorners } = useThemeStore();
@@ -23,14 +23,14 @@ export default function Settings() {
           onClick={() => setActiveTab('background')}
           className={`flex items-center gap-3 px-3 py-2 rounded-(--radius-widget) font-bold transition-all ${activeTab === 'background' ? 'bg-primary text-primary-content scale-105' : 'hover:bg-base-300/50'}`}
         >
-          <ImageIcon size={18} />
+          <Image size={18} />
           Wallpaper
         </button>
         <button 
           onClick={() => setActiveTab('interface')}
           className={`flex items-center gap-3 px-3 py-2 rounded-(--radius-widget) font-bold transition-all ${activeTab === 'interface' ? 'bg-primary text-primary-content scale-105' : 'hover:bg-base-300/50'}`}
         >
-          <LayoutTemplate size={18} />
+          <Grid3x3 size={18} />
           Interface
         </button>
       </div>
@@ -81,7 +81,7 @@ export default function Settings() {
                 >
                   <img src={`/wallpapers/${bg}.png`} alt={bg} className="absolute inset-0 w-full h-full object-cover z-0" />
                   <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent z-10"></div>
-                  <span className="relative z-20 text-white drop-shadow-md capitalize text-left text-xs break-all">{bg.replace('wallhaven-', '').replace('_1920x1080', '')}</span>
+                  <span className="relative z-20 text-base-content drop-shadow-md capitalize text-left text-xs break-all">{bg.replace('wallhaven-', '').replace('_1920x1080', '')}</span>
                   {background === bg && <div className="absolute top-2 right-2 w-3 h-3 rounded-full bg-primary animate-pulse z-20 shadow-[0_0_10px_currentColor]"></div>}
                 </button>
               ))}

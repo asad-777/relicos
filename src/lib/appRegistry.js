@@ -1,4 +1,4 @@
-import { Activity, TerminalSquare, Box, Calculator, Music, LayoutDashboard, Globe, PlaySquare } from 'lucide-react';
+import { Settings2, Terminal, Box, Calculator, Music, AppWindows, Globe, Video } from 'pixelarticons/react';
 import BrowserApp from '@/components/Apps/BrowserApp';
 import YoutubeApp from '@/components/Apps/YoutubeApp';
 
@@ -6,7 +6,7 @@ export const APP_REGISTRY = {
   settings: {
     id: 'settings',
     title: 'Settings',
-    icon: Activity,
+    icon: Settings2,
     type: 'settings',
     color: '#FFBDff',
     defaultWidth: 800,
@@ -47,7 +47,7 @@ export const APP_REGISTRY = {
   widgets: {
     id: 'widgets',
     title: 'Widgets',
-    icon: LayoutDashboard,
+    icon: AppWindows,
     type: 'widgets',
     color: '#FF8C00',
     defaultWidth: 600,
@@ -68,7 +68,7 @@ export const APP_REGISTRY = {
   youtube: {
     id: 'youtube',
     title: 'YouTube',
-    icon: PlaySquare,
+    icon: Video,
     component: YoutubeApp,
     type: 'youtube',
     color: '#FF0000',

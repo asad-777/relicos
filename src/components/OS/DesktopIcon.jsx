@@ -5,7 +5,7 @@ import { useWindowStore } from '@/lib/stores/windowStore';
 import { useDesktopStore } from '@/lib/stores/desktopStore';
 import { useContextMenuStore } from '@/lib/stores/contextMenuStore';
 import { APP_REGISTRY } from '@/lib/appRegistry';
-import { X } from 'lucide-react';
+import { Close } from 'pixelarticons/react';
 import { cn } from '@/lib/utils';
 
 export default function DesktopIcon({ instance }) {
@@ -106,7 +106,7 @@ export default function DesktopIcon({ instance }) {
         if (app) openWindow({ id: app.id, title: app.title, type: app.type, width: app.defaultWidth, height: app.defaultHeight });
       }},
       { divider: true },
-      { label: 'Delete Icon', icon: X, onClick: () => removeIcon(instance.instanceId) }
+      { label: 'Delete Icon', icon: Close, onClick: () => removeIcon(instance.instanceId) }
     ]);
   };
 
@@ -118,7 +118,7 @@ export default function DesktopIcon({ instance }) {
   return (
     <div 
       className={cn(
-        "absolute flex flex-col items-center gap-2 w-24 transition-transform group cursor-pointer z-10 p-2 rounded-xl",
+        "absolute flex flex-col items-center gap-2 w-28 transition-transform group cursor-pointer z-10 p-2 rounded-xl",
         isSelected ? "bg-primary/30 outline outline-2 outline-primary shadow-[0_0_15px_rgba(var(--color-primary),0.5)]" : "hover:bg-base-content/10 outline outline-2 outline-transparent"
       )}
       style={{ left: `${instance.x}px`, top: `${instance.y}px` }}
@@ -129,7 +129,7 @@ export default function DesktopIcon({ instance }) {
     >
       <div 
         className={cn(
-          "w-16 h-16 backdrop-blur-md rounded-(--radius-widget) border-2 flex items-center justify-center shadow-[4px_4px_0px_rgba(0,0,0,0.5)] transition-all duration-300",
+          "w-20 h-20 backdrop-blur-md rounded-(--radius-widget) border-2 flex items-center justify-center shadow-[4px_4px_0px_rgba(0,0,0,0.5)] transition-all duration-300",
           isSelected ? "brightness-110 scale-105" : "group-hover:scale-105 group-hover:brightness-110"
         )}
         style={{
@@ -138,7 +138,7 @@ export default function DesktopIcon({ instance }) {
           color: color
         }}
       >
-        <Icon size={32} />
+        <Icon size={48} />
       </div>
       <span 
         className={cn(

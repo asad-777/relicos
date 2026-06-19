@@ -39,13 +39,13 @@ export default function BootScreen({ onComplete }) {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex flex-col bg-black text-[#00FF00] font-mono p-4 cursor-pointer overflow-hidden"
+      className="fixed inset-0 z-50 flex flex-col bg-base-300 text-success font-mono p-4 cursor-pointer overflow-hidden"
       onClick={onComplete}
       title="Click to skip"
     >
       <div className="flex flex-col gap-1 text-xs sm:text-sm">
         {logs.map((log, i) => (
-          <div key={i}>[  <span className="text-white">OK</span>  ] {log}</div>
+          <div key={i}>[  <span className="text-base-content">OK</span>  ] {log}</div>
         ))}
       </div>
 
@@ -74,14 +74,14 @@ export default function BootScreen({ onComplete }) {
             <div><span className="text-primary font-bold">Theme:</span> original</div>
             <div><span className="text-primary font-bold">Terminal:</span> tty1</div>
             <div className="mt-2 flex gap-1">
-               <div className="w-4 h-4 bg-black"></div>
-               <div className="w-4 h-4 bg-red-500"></div>
-               <div className="w-4 h-4 bg-green-500"></div>
-               <div className="w-4 h-4 bg-yellow-500"></div>
-               <div className="w-4 h-4 bg-blue-500"></div>
+               <div className="w-4 h-4 bg-base-300"></div>
+               <div className="w-4 h-4 bg-error"></div>
+               <div className="w-4 h-4 bg-success"></div>
+               <div className="w-4 h-4 bg-warning"></div>
+               <div className="w-4 h-4 bg-info"></div>
                <div className="w-4 h-4 bg-purple-500"></div>
                <div className="w-4 h-4 bg-cyan-500"></div>
-               <div className="w-4 h-4 bg-white"></div>
+               <div className="w-4 h-4 bg-base-100"></div>
             </div>
           </div>
         </div>

@@ -11,7 +11,7 @@ const DEFAULT_DISTANCE = 150
 const DEFAULT_DISABLEMAGNIFICATION = false
 
 const dockVariants = cva(
-  "supports-backdrop-blur:bg-white/10 supports-backdrop-blur:dark:bg-black/10 mx-auto mt-8 flex h-[58px] w-max items-center justify-center gap-4 rounded-[var(--radius-widget)] border p-2 px-4 backdrop-blur-md"
+  "supports-backdrop-blur:bg-base-content/10 supports-backdrop-blur:dark:bg-base-content/10 mx-auto mt-8 flex h-[58px] w-max items-center justify-center gap-4 rounded-[var(--radius-widget)] border p-2 px-4 backdrop-blur-md"
 )
 
 const Dock = React.forwardRef((
@@ -104,7 +104,7 @@ const DockIcon = ({
   ...props
 }) => {
   const ref = useRef(null)
-  const padding = Math.max(6, size * 0.2)
+  const padding = 0
   const defaultMouseX = useMotionValue(Infinity)
 
   const distanceCalc = useTransform(mouseX ?? defaultMouseX, (val) => {
@@ -117,7 +117,7 @@ const DockIcon = ({
   const sizeTransform = useTransform(
     distanceCalc, 
     [-distance, -size, 0, size, distance], 
-    [size, size * 1.3, targetSize, size * 1.3, size]
+    [size, size * 1, targetSize, size * 1, size]
   )
 
   const scaleSize = useSpring(sizeTransform, {
@@ -131,12 +131,12 @@ const DockIcon = ({
       ref={ref}
       style={{ height: scaleSize, minWidth: scaleSize, padding }}
       className={cn(
-        "flex cursor-pointer items-center justify-center rounded-(--radius-widget) px-4 py-2",
+        "flex cursor-pointer items-center justify-center rounded-[var(--radius-widget)]",
         disableMagnification && "hover:bg-muted-foreground transition-colors",
         className
       )}
       {...props}>
-      <div>{children}</div>
+      <div className="w-full h-full flex items-center justify-center">{children}</div>
     </motion.div>
   );
 }
