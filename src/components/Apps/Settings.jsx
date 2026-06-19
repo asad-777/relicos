@@ -79,9 +79,9 @@ export default function Settings() {
                   onClick={() => setBackground(bg)}
                   className={`relative overflow-hidden aspect-video rounded-(--radius-widget) font-bold transition-all border-4 flex items-end p-2 ${background === bg ? 'border-primary scale-[1.02]' : 'border-base-content/10 hover:border-primary/50 hover:scale-[1.01]'}`}
                 >
-                  <img src={`/wallpapers/${bg}.png`} alt={bg} className="absolute inset-0 w-full h-full object-cover z-0" />
-                  <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent z-10"></div>
-                  <span className="relative z-20 text-base-content drop-shadow-md capitalize text-left text-xs break-all">{bg.replace('wallhaven-', '').replace('_1920x1080', '')}</span>
+                  <img src={`/wallpapers/${bg}`} alt={bg} className="absolute inset-0 w-full h-full object-cover z-0" />
+                  <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.8),transparent)] z-10"></div>
+                  <span className="relative z-20 text-base-content drop-shadow-md capitalize text-left text-xs break-all">{bg.replace('wallhaven-', '').replace(/\.[^/.]+$/, "")}</span>
                   {background === bg && <div className="absolute top-2 right-2 w-3 h-3 rounded-full bg-primary animate-pulse z-20 shadow-[0_0_10px_currentColor]"></div>}
                 </button>
               ))}

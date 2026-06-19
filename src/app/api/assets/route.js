@@ -12,8 +12,7 @@ export async function GET() {
     try {
       const wallpaperFiles = await fs.readdir(wallpapersPath);
       wallpapers = wallpaperFiles
-        .filter(file => file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.jpeg'))
-        .map(file => file.replace(/\.[^/.]+$/, "")); // remove extension
+        .filter(file => file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.jpeg') || file.endsWith('.webp'));
     } catch (e) {
       console.warn('Could not read wallpapers directory:', e.message);
     }

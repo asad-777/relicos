@@ -9,7 +9,7 @@ export const useThemeStore = create(
   persist(
     (set) => ({
       theme: 'original',
-      background: 'wallhaven-4vr8m3_1920x1080',
+      background: 'wallhaven-4vr8m3_1920x1080.webp',
       backgrounds: [],
       corners: 'round',
       

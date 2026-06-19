@@ -192,7 +192,7 @@ export default function Desktop() {
   return (
     <div 
       className="relative w-full h-screen overflow-hidden flex flex-col bg-cover bg-center transition-all duration-700"
-      style={{ backgroundImage: `url('/wallpapers/${backgrounds.length > 0 && backgrounds.includes(background) ? background : (backgrounds[0] || 'default')}.png')` }}
+      style={{ backgroundImage: `url('/wallpapers/${backgrounds.length > 0 && backgrounds.includes(background) ? background : (backgrounds[0] || 'default.png')}')` }}
     >
       <ContextMenu />
       <TopBar 
