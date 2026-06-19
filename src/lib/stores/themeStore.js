@@ -3,21 +3,18 @@ import { persist } from 'zustand/middleware';
 
 export const THEMES = ['original', 'pocket', 'color', 'advance', 'twilight'];
 
-export const BACKGROUNDS = [
-  'wallhaven-4vr8m3_1920x1080',
-  'wallhaven-72woj3_1920x1080',
-  'wallhaven-76lpge_1920x1080',
-  'wallhaven-83m6lk_1920x1080',
-  'wallhaven-neomdr_1920x1080'
-];
+// Backgrounds are fetched dynamically from /api/assets
 
 export const useThemeStore = create(
   persist(
     (set) => ({
       theme: 'original',
       background: 'wallhaven-4vr8m3_1920x1080',
+      backgrounds: [],
       corners: 'round',
       
+      setBackgrounds: (bgs) => set({ backgrounds: bgs }),
+
       setTheme: (newTheme) => {
         if (THEMES.includes(newTheme)) {
           set({ theme: newTheme });

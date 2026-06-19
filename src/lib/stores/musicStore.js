@@ -1,15 +1,9 @@
 import { create } from 'zustand';
 
-export const TRACKS = [
-  "L.mp3",
-  "fast.mp3",
-  "funky.mp3",
-  "just do it.mp3",
-  "kkkkk.mp3",
-  "Kiss my lips nigga.mp3"
-];
+// Tracks are fetched dynamically from /api/assets
 
 export const useMusicStore = create((set, get) => ({
+  tracks: [],
   currentTrackIndex: 0,
   isPlaying: false,
   progress: 0,
@@ -17,17 +11,19 @@ export const useMusicStore = create((set, get) => ({
   isMuted: false,
   seekRequest: null, // used to signal the audio element to seek to a specific time
   
+  setTracks: (tracks) => set({ tracks }),
+
   togglePlay: () => set(state => ({ isPlaying: !state.isPlaying })),
   play: () => set({ isPlaying: true }),
   pause: () => set({ isPlaying: false }),
   
   nextTrack: () => set(state => ({ 
-    currentTrackIndex: (state.currentTrackIndex + 1) % TRACKS.length,
+    currentTrackIndex: state.tracks.length > 0 ? (state.currentTrackIndex + 1) % state.tracks.length : 0,
     isPlaying: true 
   })),
   
   prevTrack: () => set(state => ({ 
-    currentTrackIndex: (state.currentTrackIndex - 1 + TRACKS.length) % TRACKS.length,
+    currentTrackIndex: state.tracks.length > 0 ? (state.currentTrackIndex - 1 + state.tracks.length) % state.tracks.length : 0,
     isPlaying: true 
   })),
   

@@ -4,7 +4,7 @@ import { Search, Volume3, Lightbulb, Globe, Play, Square, CloudSun, ChevronRight
 import CalendarPopup from '@/components/OS/CalendarPopup';
 import ControlCenter from '@/components/OS/ControlCenter';
 import { useSystemStore } from '@/lib/stores/systemStore';
-import { useMusicStore, TRACKS } from '@/lib/stores/musicStore';
+import { useMusicStore } from '@/lib/stores/musicStore';
 import { useWindowStore } from '@/lib/stores/windowStore';
 import { APP_REGISTRY } from '@/lib/appRegistry';
 
@@ -42,9 +42,9 @@ export default function TopBar({
   isCalendarOpen, setIsCalendarOpen,
   isControlCenterOpen, setIsControlCenterOpen
 }) {
-  const { currentTrackIndex, isPlaying, togglePlay, nextTrack } = useMusicStore();
+  const { isPlaying, togglePlay, currentTrackIndex, tracks, nextTrack } = useMusicStore();
   const { windows, activeZIndex } = useWindowStore();
-  const currentTrack = TRACKS[currentTrackIndex];
+  const currentTrack = tracks.length > 0 ? tracks[currentTrackIndex] : null;
 
   // Find active window
   const activeWindow = windows.find(w => w.zIndex === activeZIndex && !w.isMinimized);
@@ -138,7 +138,7 @@ export default function TopBar({
         <div className="hidden lg:flex items-center gap-4 bg-base-300/60 px-4 py-2 rounded-2xl border border-base-content/10 w-full max-w-[260px] shadow-sm">
           <Equalizer isPlaying={isPlaying} />
           <span className="text-xs font-black uppercase truncate opacity-90 flex-1 tracking-wider" title={currentTrack}>
-            {currentTrack.replace('.mp3', '')}
+            {currentTrack ? currentTrack.replace('.mp3', '') : 'No tracks'}
           </span>
           <div className="flex items-center gap-2">
             <button onClick={togglePlay} className="hover:text-primary transition-all hover:scale-110 flex-shrink-0 bg-base-100 p-1.5 rounded-xl border border-base-content/5 shadow-sm">

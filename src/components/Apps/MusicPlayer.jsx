@@ -1,6 +1,6 @@
 'use client';
 
-import { useMusicStore, TRACKS } from '@/lib/stores/musicStore';
+import { useMusicStore } from '@/lib/stores/musicStore';
 import BaseApp from './BaseApp';
 import { Play, Square, ArrowRight, ArrowLeft, Volume3, Volume, Music } from 'pixelarticons/react';
 
@@ -14,11 +14,13 @@ export default function MusicPlayer() {
     togglePlay, 
     nextTrack, 
     prevTrack, 
+    seekRequest, 
+    clearSeekRequest, 
     setSeekRequest, 
-    toggleMute 
+    tracks 
   } = useMusicStore();
 
-  const currentTrack = TRACKS[currentTrackIndex];
+  const currentTrack = tracks.length > 0 ? tracks[currentTrackIndex] : null;
 
   const handleSeek = (e) => {
     const time = parseFloat(e.target.value);
@@ -35,26 +37,26 @@ export default function MusicPlayer() {
   return (
     <BaseApp>
       <div className="flex flex-col h-full bg-base-100 p-6 overflow-hidden items-center justify-between">
-      <div className="flex flex-col h-full bg-base-100 p-6 overflow-hidden items-center justify-between">
-        
         {/* Album Art Placeholder */}
-        <div className="w-48 h-48 sm:w-64 sm:h-64 rounded-(--radius-widget) bg-base-300 border-4 border-base-content/20 flex items-center justify-center shadow-lg relative overflow-hidden group">
-          <div className="absolute inset-0 bg-linear-to-tr from-primary/40 to-secondary/40 opacity-50"></div>
+        <div className="w-48 h-48 sm:w-64 sm:h-64 rounded-[var(--radius-widget)] bg-base-300 border-4 border-base-content/20 flex items-center justify-center shadow-lg relative overflow-hidden group">
+          <div className="absolute inset-0 bg-[linear-gradient(to_top_right,var(--color-primary)_0%,var(--color-secondary)_100%)] opacity-50 mix-blend-overlay"></div>
           {isPlaying ? (
-            <div className="flex gap-2 items-end h-16">
-              <div className="w-3 bg-primary rounded-full animate-bounce h-full" style={{ animationDelay: '0ms' }}></div>
-              <div className="w-3 bg-primary rounded-full animate-bounce h-2/3" style={{ animationDelay: '200ms' }}></div>
-              <div className="w-3 bg-primary rounded-full animate-bounce h-4/5" style={{ animationDelay: '400ms' }}></div>
-              <div className="w-3 bg-primary rounded-full animate-bounce h-1/2" style={{ animationDelay: '600ms' }}></div>
+            <div className="flex gap-2 items-end h-16 z-10">
+              <div className="w-3 bg-primary-content rounded-full animate-bounce h-full" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-3 bg-primary-content rounded-full animate-bounce h-2/3" style={{ animationDelay: '200ms' }}></div>
+              <div className="w-3 bg-primary-content rounded-full animate-bounce h-4/5" style={{ animationDelay: '400ms' }}></div>
+              <div className="w-3 bg-primary-content rounded-full animate-bounce h-1/2" style={{ animationDelay: '600ms' }}></div>
             </div>
           ) : (
-            <Music size={64} className="opacity-50 text-base-content" />
+            <Music size={64} className="opacity-50 text-base-content z-10" />
           )}
         </div>
 
         {/* Track Info */}
         <div className="w-full text-center space-y-2 mt-4">
-          <h2 className="text-xl sm:text-2xl font-bold truncate px-4">{currentTrack.replace('.mp3', '')}</h2>
+          <span className="font-bold uppercase tracking-widest text-primary truncate max-w-[200px]" title={currentTrack ? currentTrack.replace('.mp3', '') : 'No tracks'}>
+            {currentTrack ? currentTrack.replace('.mp3', '') : 'No tracks loaded'}
+          </span>
           <p className="text-base-content/70 font-bold uppercase text-xs tracking-widest">Relic OS Audio</p>
         </div>
 
@@ -104,7 +106,6 @@ export default function MusicPlayer() {
             <ArrowRight size={24} className="fill-current" />
           </button>
         </div>
-      </div>
       </div>
     </BaseApp>
   )

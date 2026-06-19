@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useThemeStore, THEMES, BACKGROUNDS } from '@/lib/stores/themeStore';
+import { useThemeStore, THEMES } from '@/lib/stores/themeStore';
 import { Monitor, Image, Grid3x3, Square, Circle } from 'pixelarticons/react';
 
 export default function Settings() {
-  const { theme, setTheme, background, setBackground, corners, setCorners } = useThemeStore();
+  const { theme, setTheme, background, backgrounds, setBackground, corners, setCorners } = useThemeStore();
   const [activeTab, setActiveTab] = useState('appearance');
 
   return (
@@ -73,7 +73,7 @@ export default function Settings() {
             <p className="opacity-70 font-body">Select the background image for your desktop.</p>
             
             <div className="grid grid-cols-2 gap-4">
-              {BACKGROUNDS.map(bg => (
+              {backgrounds.map(bg => (
                 <button 
                   key={bg}
                   onClick={() => setBackground(bg)}

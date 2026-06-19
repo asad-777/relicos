@@ -4,10 +4,11 @@ import { useState, useEffect, useRef } from 'react';
 
 import { useWindowStore } from '@/lib/stores/windowStore';
 import { useWidgetStore } from '@/lib/stores/widgetStore';
-import { useThemeStore, THEMES, BACKGROUNDS } from '@/lib/stores/themeStore';
+import { useThemeStore, THEMES } from '@/lib/stores/themeStore';
 import { useContextMenuStore } from '@/lib/stores/contextMenuStore';
 import { useDesktopStore } from '@/lib/stores/desktopStore';
 import { useSystemStore } from '@/lib/stores/systemStore';
+import { useMusicStore } from '@/lib/stores/musicStore';
 import Window from './Window';
 import AppLauncher from './AppLauncher';
 import Widget from './Widget';
@@ -31,7 +32,8 @@ import ContextMenu from './ContextMenu';
 export default function Desktop() {
   const { windows, restoreWindow, focusWindow, openWindow, closeWindow } = useWindowStore();
   const { activeWidgets, addWidget } = useWidgetStore();
-  const { theme, background } = useThemeStore();
+  const { theme, background, backgrounds, setBackgrounds } = useThemeStore();
+  const { setTracks } = useMusicStore();
   const { openMenu } = useContextMenuStore();
   const { icons, selectedIconIds, clearSelection, setSelection, addIcon } = useDesktopStore();
   const { brightness } = useSystemStore();
@@ -79,6 +81,19 @@ export default function Desktop() {
   }, []);
 
   useEffect(() => {
+    // Hydrate dynamic assets (wallpapers and music)
+    fetch('/api/assets')
+      .then(res => res.json())
+      .then(data => {
+        if (data.wallpapers && data.wallpapers.length > 0) {
+          setBackgrounds(data.wallpapers);
+        }
+        if (data.music && data.music.length > 0) {
+          setTracks(data.music);
+        }
+      })
+      .catch(err => console.error('Failed to load assets:', err));
+
     const timer = setInterval(() => setTime(new Date()), 1000);
     const mockStats = setInterval(() => {
       setCpuLoad(Math.floor(Math.random() * 20) + 10);
@@ -177,7 +192,7 @@ export default function Desktop() {
   return (
     <div 
       className="relative w-full h-screen overflow-hidden flex flex-col bg-cover bg-center transition-all duration-700"
-      style={{ backgroundImage: `url('/wallpapers/${BACKGROUNDS.includes(background) ? background : BACKGROUNDS[0]}.png')` }}
+      style={{ backgroundImage: `url('/wallpapers/${backgrounds.length > 0 && backgrounds.includes(background) ? background : (backgrounds[0] || 'default')}.png')` }}
     >
       <ContextMenu />
       <TopBar 

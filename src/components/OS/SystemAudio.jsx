@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from 'react';
 
-import { useMusicStore, TRACKS } from '@/lib/stores/musicStore';
+import { useMusicStore } from '@/lib/stores/musicStore';
 import { useSystemStore } from '@/lib/stores/systemStore';
 
 export default function SystemAudio() {
@@ -15,12 +15,13 @@ export default function SystemAudio() {
     setProgress, 
     setDuration, 
     nextTrack, 
-    clearSeekRequest 
+    clearSeekRequest,
+    tracks 
   } = useMusicStore();
 
   const { volume, isMuted } = useSystemStore();
 
-  const currentTrack = TRACKS[currentTrackIndex];
+  const currentTrack = tracks.length > 0 ? tracks[currentTrackIndex] : null;
 
   useEffect(() => {
     if (!audioRef.current) return;
@@ -49,20 +50,26 @@ export default function SystemAudio() {
   const handleTimeUpdate = () => {
     if (audioRef.current) {
       setProgress(audioRef.current.currentTime);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (audioRef.current) {
       setDuration(audioRef.current.duration || 0);
     }
   };
 
-  const handleEnded = () => {
-    nextTrack();
-  };
-
   return (
-    <audio 
-      ref={audioRef} 
-      src={`/music/${currentTrack}`} 
-      onTimeUpdate={handleTimeUpdate}
-      onEnded={handleEnded}
-    />
+    <>
+      {currentTrack && (
+        <audio 
+          ref={audioRef} 
+          src={`/music/${currentTrack}`} 
+          onTimeUpdate={handleTimeUpdate}
+          onLoadedMetadata={handleLoadedMetadata}
+          onEnded={nextTrack}
+        />
+      )}
+    </>
   );
 }

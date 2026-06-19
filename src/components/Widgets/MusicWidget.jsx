@@ -1,7 +1,7 @@
 'use client';
 
 import Widget from '../OS/Widget';
-import { useMusicStore, TRACKS } from '@/lib/stores/musicStore';
+import { useMusicStore } from '@/lib/stores/musicStore';
 import { Play, Square, ArrowLeft, ArrowRight, Music } from 'pixelarticons/react';
 
 export default function MusicWidget({ instanceId, initialX = 64, initialY = 500, initialWidth, initialHeight, preview }) {
@@ -12,10 +12,11 @@ export default function MusicWidget({ instanceId, initialX = 64, initialY = 500,
     duration, 
     togglePlay, 
     nextTrack, 
-    prevTrack 
+    prevTrack,
+    tracks 
   } = useMusicStore();
 
-  const currentTrack = TRACKS[currentTrackIndex];
+  const currentTrack = tracks[currentTrackIndex];
   const progressPercent = duration > 0 ? (progress / duration) * 100 : 0;
   
   return (
@@ -26,7 +27,9 @@ export default function MusicWidget({ instanceId, initialX = 64, initialY = 500,
             <Music size={28} />
           </div>
           <div className="flex-1 overflow-hidden">
-            <h3 className="font-bold text-sm truncate uppercase tracking-widest text-primary mb-1">{currentTrack.replace('.mp3', '')}</h3>
+            <h3 className="font-bold text-sm truncate uppercase tracking-widest text-primary mb-1">
+              {tracks.length > 0 ? tracks[currentTrackIndex].replace('.mp3', '') : 'No tracks loaded'}
+            </h3>
             <p className="text-xs font-bold opacity-60 truncate uppercase">System Audio</p>
           </div>
         </div>
