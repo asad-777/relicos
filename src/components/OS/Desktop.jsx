@@ -136,37 +136,37 @@ export default function Desktop() {
   const handlePointerMove = (e) => {
     setSelectionBox(prev => {
       if (!prev) return null;
-      
-      const newBox = { ...prev, currentX: e.clientX, currentY: e.clientY };
-      
-      // Calculate intersection
-      const left = Math.min(newBox.startX, newBox.currentX);
-      const right = Math.max(newBox.startX, newBox.currentX);
-      const top = Math.min(newBox.startY, newBox.currentY);
-      const bottom = Math.max(newBox.startY, newBox.currentY);
-      
-      const boxRect = { left, right, top, bottom };
-      
-      const intersectingIds = [];
-      const iconElements = document.querySelectorAll('[data-icon-id]');
-      
-      iconElements.forEach(el => {
-        const rect = el.getBoundingClientRect();
-        if (
-          rect.left < boxRect.right &&
-          rect.right > boxRect.left &&
-          rect.top < boxRect.bottom &&
-          rect.bottom > boxRect.top
-        ) {
-          intersectingIds.push(el.getAttribute('data-icon-id'));
-        }
-      });
-      
-      setSelection(intersectingIds);
-      
-      return newBox;
+      return { ...prev, currentX: e.clientX, currentY: e.clientY };
     });
   };
+
+  useEffect(() => {
+    if (!selectionBox) return;
+    
+    const left = Math.min(selectionBox.startX, selectionBox.currentX);
+    const right = Math.max(selectionBox.startX, selectionBox.currentX);
+    const top = Math.min(selectionBox.startY, selectionBox.currentY);
+    const bottom = Math.max(selectionBox.startY, selectionBox.currentY);
+    
+    const boxRect = { left, right, top, bottom };
+    
+    const intersectingIds = [];
+    const iconElements = document.querySelectorAll('[data-icon-id]');
+    
+    iconElements.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (
+        rect.left < boxRect.right &&
+        rect.right > boxRect.left &&
+        rect.top < boxRect.bottom &&
+        rect.bottom > boxRect.top
+      ) {
+        intersectingIds.push(el.getAttribute('data-icon-id'));
+      }
+    });
+    
+    setSelection(intersectingIds);
+  }, [selectionBox, setSelection]);
 
   const handlePointerUp = () => {
     setSelectionBox(null);
