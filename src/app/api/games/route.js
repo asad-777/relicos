@@ -8,7 +8,8 @@ const MOCK_GAMES = [
     description: 'A Pico-8 platformer classic.',
     thumbnail: 'https://img.itch.zone/aW1hZ2UvMjg2NzgvMTI2NzQ5LnBuZw==/original/H3%2F9M0.png',
     embed_url: 'https://itch.io/embed-upload/28678',
-    status: 'approved'
+    status: 'approved',
+    controls_layout: { dpad: true, buttons: [{ label: 'Z', key: 'z' }, { label: 'X', key: 'x' }] }
   },
   {
     id: '2',
@@ -16,7 +17,8 @@ const MOCK_GAMES = [
     description: 'A run and gun action game.',
     thumbnail: 'https://img.itch.zone/aW1hZ2UvMTAzNTAwMC81OTA4NzAyLnBuZw==/315x250%23c/yXhZ3R.png',
     embed_url: 'https://itch.io/embed-upload/1035000',
-    status: 'approved'
+    status: 'approved',
+    controls_layout: { dpad: true, buttons: [{ label: 'Z', key: 'z' }, { label: 'X', key: 'x' }, { label: 'C', key: 'c' }] }
   }
 ];
 
@@ -29,7 +31,6 @@ export async function GET(request) {
     const { data, error } = await supabase
       .from('games')
       .select('*')
-      .eq('status', 'approved')
       .order('created_at', { ascending: false });
 
     if (error) throw error;

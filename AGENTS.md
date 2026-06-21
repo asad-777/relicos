@@ -26,8 +26,25 @@ Relic OS is a custom browser-based operating system with a retro Game Boy handhe
 
 ## Project Structure
 
-```
-Update this here
+```text
+src/
+├── app/
+│   ├── api/          # Route handlers (assets, games, search, youtube)
+│   ├── os/           # OS specific pages
+│   ├── globals.css   # Global styles and DaisyUI themes
+│   └── page.js       # Main landing page
+├── components/
+│   ├── Apps/         # Inbuilt OS apps (Browser, Calculator, Games, Music, etc.)
+│   ├── landing/      # Landing page components
+│   ├── OS/           # Core OS UI (Desktop, TopBar, Window, etc.)
+│   ├── ui/           # Reusable primitives (buttons, docks, grid patterns)
+│   └── Widgets/      # Desktop widgets (Clock, Calendar, Weather, Music)
+├── Fonts/            # Local fonts (main, primary, asad)
+└── lib/
+    ├── stores/       # Zustand state stores (window, theme, music, desktop, etc.)
+    ├── appRegistry.js
+    ├── widgetRegistry.js
+    └── supabase.js   # Supabase client
 ```
 
 ---
@@ -55,10 +72,9 @@ Update this here
 
 ### 2. Game Directory
 
-- Games stored in DB with: `id`, `title`, `description`, `tags`, `thumbnail`, `embed_url`, `submitted_by`, `status`, `created_at`
+- Games stored in DB with: `id`, `title`, `description`, `thumbnail`, `embed_url`, `submitted_by`, `created_at`
 - `embed_url` must be the itch.io embed-upload URL format: `https://itch.io/embed-upload/GAME_ID`
 - Games launch inside a Window component via `<iframe src={embed_url} />`
-- Status field: `pending` | `approved` | `rejected` — only `approved` games are returned by the public API
 
 ### 3. Theme System
 
@@ -95,11 +111,10 @@ Update this here
 
 ## Game Submission Flow
 
-1. User fills out a form: game title, itch.io embed URL, description, tags, contact email
-2. Form posts to `POST /api/submit` — saved to DB with `status: pending`
-3. Curator reviews in admin panel at `/admin` — tests the game in an iframe preview
-4. Curator approves or rejects — status updated via `PATCH /api/admin`
-5. Approved games appear live in the directory immediately
+1. User fills out a form: game title, itch.io embed URL, description, contact email
+2. Form posts to `POST /api/submit` — saved to DB.
+3. Curator reviews in admin panel at `/admin` — tests the game in an iframe preview.
+4. Games appear live in the directory immediately.
 
 **Validation rules (server-side in route handler):**
 
@@ -160,7 +175,6 @@ Update this here
 
 ### API Routes
 
-- Always check `status === 'approved'` before returning games from public endpoints
 - Admin routes must verify `ADMIN_API_KEY` from request headers before processing
 - Validate all inputs server-side — never trust the client
 
