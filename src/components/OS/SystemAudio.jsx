@@ -16,10 +16,11 @@ export default function SystemAudio() {
     setDuration, 
     nextTrack, 
     clearSeekRequest,
+    isMuted: isMusicMuted,
     tracks 
   } = useMusicStore();
 
-  const { volume, isMuted } = useSystemStore();
+  const { volume, isMuted: isSystemMuted } = useSystemStore();
 
   const currentTrack = tracks.length > 0 ? tracks[currentTrackIndex] : null;
 
@@ -35,9 +36,9 @@ export default function SystemAudio() {
 
   useEffect(() => {
     if (!audioRef.current) return;
-    audioRef.current.muted = isMuted;
+    audioRef.current.muted = isSystemMuted || isMusicMuted;
     audioRef.current.volume = volume / 100;
-  }, [isMuted, volume]);
+  }, [isSystemMuted, isMusicMuted, volume]);
 
   useEffect(() => {
     if (seekRequest !== null && audioRef.current) {

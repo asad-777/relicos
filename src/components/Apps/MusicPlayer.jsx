@@ -11,6 +11,7 @@ export default function MusicPlayer() {
     progress, 
     duration, 
     isMuted, 
+    toggleMute,
     togglePlay, 
     nextTrack, 
     prevTrack, 
