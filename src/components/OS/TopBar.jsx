@@ -53,8 +53,8 @@ export default function TopBar({
   return (
     <div className={`absolute left-1/2 -translate-x-1/2 top-4 z-9999 backdrop-blur-xl flex items-center justify-between shadow-[4px_4px_0px_var(--color-base-content)] transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group/topbar border-2 border-base-content/10 ${
       hasActiveWindows 
-        ? 'w-[60%] max-w-3xl h-12 rounded-[24px] px-6 bg-base-200/40 hover:w-[calc(100%-2rem)] hover:max-w-none hover:h-16 hover:rounded-[32px] hover:bg-base-200/50 hover:px-8' 
-        : 'w-[calc(100%-2rem)] max-w-none h-16 rounded-[32px] px-8 bg-base-200/50'
+        ? 'w-[60%] max-w-3xl h-12 rounded-(--radius-widget) px-6 bg-base-200/40 hover:w-[calc(100%-2rem)] hover:max-w-none hover:h-16 hover:rounded-(--radius-widget) hover:bg-base-200/50 hover:px-8' 
+        : 'w-[calc(100%-2rem)] max-w-none h-16 rounded-(--radius-widget) px-8 bg-base-200/50'
     }`}>
       
       {/* Left Side: Spotlight & Socials */}

@@ -11,13 +11,13 @@ export default function ControlCenter() {
 
   return (
     <div 
-      className="absolute right-0 top-14 w-80 bg-base-200/90 backdrop-blur-2xl border-2 border-base-content/20 shadow-[8px_8px_0px_var(--color-base-content)] rounded-[32px] p-6 flex flex-col gap-6 text-base-content z-[100] animate-in slide-in-from-top-4 fade-in duration-300 origin-top-right"
+      className="absolute right-0 top-14 w-80 bg-base-200/90 backdrop-blur-2xl border-2 border-base-content/20 shadow-[8px_8px_0px_var(--color-base-content)] rounded-(--radius-widget) p-6 flex flex-col gap-6 text-base-content z-[100] animate-in slide-in-from-top-4 fade-in duration-300 origin-top-right"
       onClick={(e) => e.stopPropagation()}
     >
       {/* Sliders */}
       <div className="flex flex-col gap-4">
         {/* Brightness */}
-        <div className="flex items-center gap-3 bg-base-300/50 p-3 rounded-2xl border border-base-content/10 relative overflow-hidden group">
+        <div className="flex items-center gap-3 bg-base-300/50 p-3 rounded-(--radius-md) border border-base-content/10 relative overflow-hidden group">
           <div className="w-8 flex items-center justify-center text-base-content/70">
             {brightness > 50 ? <Lightbulb size={20} /> : <Moon size={20} />}
           </div>
@@ -31,7 +31,7 @@ export default function ControlCenter() {
         </div>
 
         {/* Volume */}
-        <div className="flex items-center gap-3 bg-base-300/50 p-3 rounded-2xl border border-base-content/10 relative overflow-hidden group">
+        <div className="flex items-center gap-3 bg-base-300/50 p-3 rounded-(--radius-md) border border-base-content/10 relative overflow-hidden group">
           <button 
             onClick={toggleMute}
             className="w-8 flex items-center justify-center text-base-content/70 hover:text-primary transition-colors cursor-pointer"
@@ -74,10 +74,10 @@ export default function ControlCenter() {
             </div>
           ) : (
             notifications.map(note => (
-              <div key={note.id} className="bg-base-300/80 p-3 rounded-xl border border-base-content/5 relative group">
+              <div key={note.id} className="bg-base-300/80 p-3 rounded-(--radius-sm) border border-base-content/5 relative group">
                 <button 
                   onClick={() => dismissNotification(note.id)}
-                  className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 bg-base-100 rounded-full hover:text-error"
+                  className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 bg-base-100 rounded-(--radius-sm) hover:text-error"
                 >
                   <Close size={10} />
                 </button>

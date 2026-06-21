@@ -45,7 +45,7 @@ export default function CalendarPopup() {
     >
       {/* Left Pocket (Months) */}
       <div 
-        className="w-fit px-2 bg-base-300 border-2 border-base-content border-r-0 rounded-l-xl relative z-10"
+        className="w-fit px-2 bg-base-300 border-2 border-base-content border-r-0 rounded-l-(--radius-window) relative z-10"
         style={{ height: '260px' }}
       >
         {/* Cover line to hide the calendar's left border where they connect */}
@@ -56,7 +56,7 @@ export default function CalendarPopup() {
             <button
               key={month}
               onClick={(e) => jumpToMonth(idx, e)}
-              className={`p-2 rounded-lg text-left transition-colors text-sm whitespace-nowrap font-bold ${currentDate.getMonth() === idx ? 'bg-primary text-primary-content border-2 border-base-content shadow-[2px_2px_0px_var(--color-base-content)]' : 'border-2 border-transparent hover:bg-base-content/10'}`}
+              className={`p-2 rounded-(--radius-sm) text-left transition-colors text-sm whitespace-nowrap font-bold ${currentDate.getMonth() === idx ? 'bg-primary text-primary-content border-2 border-base-content shadow-[2px_2px_0px_var(--color-base-content)]' : 'border-2 border-transparent hover:bg-base-content/10'}`}
             >
               {month}
             </button>
@@ -65,11 +65,11 @@ export default function CalendarPopup() {
       </div>
 
       {/* Main Calendar Area */}
-      <div className="w-[380px] bg-base-300 border-2 border-base-content rounded-r-xl rounded-bl-xl p-6 relative z-0 flex flex-col text-base-content font-bold">
+      <div className="w-[380px] bg-base-300 border-2 border-base-content rounded-r-(--radius-window) rounded-bl-(--radius-window) p-6 relative z-0 flex flex-col text-base-content font-bold">
         <div className="flex justify-between items-center mb-6 px-1 border-b-2 border-base-content/20 pb-4">
-          <button onClick={prevMonth} className="hover:bg-base-content/20 p-2 rounded-lg transition-colors cursor-pointer border-2 border-transparent hover:border-base-content"><ChevronLeft size={20} /></button>
+          <button onClick={prevMonth} className="hover:bg-base-content/20 p-2 rounded-(--radius-sm) transition-colors cursor-pointer border-2 border-transparent hover:border-base-content"><ChevronLeft size={20} /></button>
           <span className="text-xl tracking-wider uppercase">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</span>
-          <button onClick={nextMonth} className="hover:bg-base-content/20 p-2 rounded-lg transition-colors cursor-pointer border-2 border-transparent hover:border-base-content"><ChevronRight size={20} /></button>
+          <button onClick={nextMonth} className="hover:bg-base-content/20 p-2 rounded-(--radius-sm) transition-colors cursor-pointer border-2 border-transparent hover:border-base-content"><ChevronRight size={20} /></button>
         </div>
         
         <div className="grid grid-cols-7 gap-2 text-center text-xs opacity-70 mb-3 font-black uppercase">
@@ -86,7 +86,7 @@ export default function CalendarPopup() {
             return (
               <div 
                 key={day} 
-                className={`p-2 rounded-lg flex items-center justify-center aspect-square font-black transition-all border-2 ${isToday ? 'bg-primary text-primary-content border-base-content shadow-[2px_2px_0px_var(--color-base-content)] scale-110' : 'border-transparent hover:border-base-content hover:bg-base-content/10 cursor-pointer hover:scale-110'}`}
+                className={`p-2 rounded-(--radius-sm) flex items-center justify-center aspect-square font-black transition-all border-2 ${isToday ? 'bg-primary text-primary-content border-base-content shadow-[2px_2px_0px_var(--color-base-content)] scale-110' : 'border-transparent hover:border-base-content hover:bg-base-content/10 cursor-pointer hover:scale-110'}`}
               >
                 {day}
               </div>

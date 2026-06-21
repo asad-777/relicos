@@ -175,13 +175,13 @@
   --font-heading: var(--font-primary);
   --font-body: var(--font-main);
   
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --radius-3xl: 2rem;
-  --radius-4xl: 3rem;
+  --radius-sm: var(--rad-sm, 0.25rem);
+  --radius-md: var(--rad-md, 0.5rem);
+  --radius-lg: var(--rad-lg, 0.75rem);
+  --radius-xl: var(--rad-xl, 1rem);
+  --radius-2xl: var(--rad-2xl, 1.5rem);
+  --radius-3xl: var(--rad-3xl, 2rem);
+  --radius-4xl: var(--rad-4xl, 3rem);
 
   --text-xs: clamp(0.65rem, 0.7vw, 0.75rem);
   --text-sm: clamp(0.75rem, 0.8vw, 0.875rem);
@@ -202,8 +202,8 @@
   --spacing-md: clamp(1rem, 2vw, 1.5rem);
   --spacing-lg: clamp(1.5rem, 3vw, 2rem);
 
-  --radius-window: 0.75rem;
-  --radius-widget: 1rem;
+  --radius-window: var(--rad-window, 0.75rem);
+  --radius-widget: var(--rad-widget, 1rem);
 }
 
 @layer base {
@@ -234,14 +234,38 @@
     --ring: var(--color-primary);
   }
   
-  [data-corners="round"] {
-    --radius-window: 0.75rem;
-    --radius-widget: 1rem;
+  :root[data-corners="round"] {
+    --rad-window: 0.75rem;
+    --rad-widget: 1rem;
+    
+    --rad-sm: 0.25rem;
+    --rad-md: 0.5rem;
+    --rad-lg: 0.75rem;
+    --rad-xl: 1rem;
+    --rad-2xl: 1.5rem;
+    --rad-3xl: 2rem;
+    --rad-4xl: 3rem;
+
+    --radius-selector: 0.25rem !important;
+    --radius-field: 0.25rem !important;
+    --radius-box: 0.5rem !important;
   }
 
-  [data-corners="square"] {
-    --radius-window: 0px;
-    --radius-widget: 0px;
+  :root[data-corners="square"] {
+    --rad-window: 0px;
+    --rad-widget: 0px;
+
+    --rad-sm: 0px;
+    --rad-md: 0px;
+    --rad-lg: 0px;
+    --rad-xl: 0px;
+    --rad-2xl: 0px;
+    --rad-3xl: 0px;
+    --rad-4xl: 0px;
+
+    --radius-selector: 0px !important;
+    --radius-field: 0px !important;
+    --radius-box: 0px !important;
   }
 }
 

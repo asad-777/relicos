@@ -99,9 +99,10 @@ export default function Settings() {
               <div className="flex gap-4">
                 <button 
                   onClick={() => setCorners('round')}
-                  className={`flex-1 flex flex-col items-center justify-center p-6 gap-4 border-2 transition-all ${corners === 'round' ? 'border-primary bg-primary/10' : 'border-base-content/10 hover:border-primary/50'} rounded-2xl`}
+                  className={`flex-1 flex flex-col items-center justify-center p-6 gap-4 border-2 transition-all ${corners === 'round' ? 'border-primary bg-primary/10' : 'border-base-content/10 hover:border-primary/50'}`}
+                  style={{ borderRadius: '1.5rem' }}
                 >
-                  <div className="w-16 h-16 border-4 border-current rounded-2xl flex items-center justify-center">
+                  <div className="w-16 h-16 border-4 border-current flex items-center justify-center" style={{ borderRadius: '1rem' }}>
                     <Circle size={24} />
                   </div>
                   <span className="font-bold">Rounded</span>
