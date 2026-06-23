@@ -84,7 +84,7 @@ const TechCard = ({ name, icon }) => {
 
 export function TechStack() {
   return (
-    <section className="py-16 bg-base-100/90 border-b-2 border-base-content flex flex-col items-center">
+    <section className="py-16  border-b-2 border-base-content flex flex-col items-center">
       <h2 className="text-3xl md:text-5xl font-black font-heading uppercase tracking-widest text-base-content mb-12 text-center">
         Tech Stack
       </h2>
