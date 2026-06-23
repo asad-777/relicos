@@ -1,27 +1,46 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Smartphone } from 'pixelarticons/react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const BOOT_LOGS = [
-  "Loading Linux relic-retro-core...",
-  "Loading initial ramdisk...",
-  ":: running early hook [udev]",
-  "Starting systemd-udevd version 255-1",
-  ":: running hook [udev]",
-  "Triggering uevents...",
-  ":: mounting '/dev/disk/by-uuid/' on real root",
-  ":: running cleanup hook [udev]",
-  "Welcome to Relic OS Linux!",
-  "Starting NetworkManager...",
-  "Starting Display Manager...",
-  "Running neofetch..."
+  "Relic OS BIOS v1.0.4",
+  "Copyright (C) 2024 Relic Systems Inc.",
+  "Checking RAM... 640K OK",
+  "Reticulating splines...",
+  "Warming up pixels...",
+  "Tuning the flux capacitor...",
+  "Loading kernel...",
+  "Mounting virtual filesystem...",
+  "Initializing window manager...",
+  "Boot sequence complete."
 ];
 
 export default function BootScreen({ onComplete }) {
   const [logs, setLogs] = useState([]);
-  const [showNeofetch, setShowNeofetch] = useState(false);
+  const [showButton, setShowButton] = useState(false);
+  const [isMobile, setIsMobile] = useState(null);
 
   useEffect(() => {
+    const checkDimensions = () => {
+      if (window.innerWidth < 1080 || window.innerHeight < 720) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    checkDimensions();
+    window.addEventListener('resize', checkDimensions);
+    return () => window.removeEventListener('resize', checkDimensions);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile === true || isMobile === null) return;
+
     let currentLog = 0;
     const interval = setInterval(() => {
       if (currentLog < BOOT_LOGS.length) {
@@ -29,63 +48,92 @@ export default function BootScreen({ onComplete }) {
         currentLog++;
       } else {
         clearInterval(interval);
-        setTimeout(() => setShowNeofetch(true), 400);
-        setTimeout(() => onComplete(), 3000); // give 3 seconds to read neofetch
+        setTimeout(() => setShowButton(true), 500);
       }
-    }, 120);
+    }, 200);
 
     return () => clearInterval(interval);
-  }, [onComplete]);
+  }, [isMobile]);
+
+  if (isMobile === null) return <div className="fixed inset-0 bg-base-300 z-50"></div>;
+
+  if (isMobile) {
+    return (
+      <>
+      <div className="absolute top-8 left-8 z-51">
+        <Link href="/">
+          <Button variant="outline" className="font-heading uppercase tracking-widest border-2 border-base-content bg-base-100 text-base-content hover:bg-base-300 shadow-[4px_4px_0px_var(--color-base-content)] hover:translate-y-1 hover:shadow-none transition-all p-6">
+            &lt;- Go Back
+          </Button>
+        </Link>
+      </div>
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-base-300 p-8 text-center">
+        <div className="bg-base-200 border-4 border-error p-8 max-w-screen shadow-[8px_8px_0px_var(--color-error)] flex flex-col items-center">
+          <Smartphone className="w-16 h-16 text-error mb-4 animate-pulse" />
+          <h1 className="text-3xl font-black mb-4 uppercase font-heading text-error">Screen Too Small</h1>
+          <p className="text-lg text-base-content font-body font-bold uppercase">
+            Relic OS requires a minimum resolution of 1080 x 720. 
+            <br/><br/>
+            Please use a larger device like an iPad or a computer to boot the OS.
+          </p>
+        </div>
+      </div>
+      </>
+    );
+  }
 
   return (
-    <div 
-      className="fixed inset-0 z-50 flex flex-col bg-base-300 text-success font-mono p-4 cursor-pointer overflow-hidden"
-      onClick={onComplete}
-      title="Click to skip"
-    >
-      <div className="flex flex-col gap-1 text-xs sm:text-sm">
-        {logs.map((log, i) => (
-          <div key={i}>[  <span className="text-base-content">OK</span>  ] {log}</div>
-        ))}
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center  text-success font-mono p-8 overflow-hidden">
+      
+      {/* Absolute Go Back Button */}
+      <div className="absolute top-8 left-8 z-50">
+        <Link href="/">
+          <Button variant="outline" className="font-heading uppercase tracking-widest border-2 border-base-content bg-base-100 text-base-content hover:bg-base-300 shadow-[4px_4px_0px_var(--color-base-content)] hover:translate-y-1 hover:shadow-none transition-all p-6">
+            &lt;- Go Back
+          </Button>
+        </Link>
       </div>
 
-      {showNeofetch && (
-        <div className="mt-8 flex gap-8 animate-in fade-in duration-500">
+      <div className="max-w-2xl w-full flex flex-col items-center">
+        
+        {/* Header containing Logo and ASCII */}
+        <div className="flex items-center justify-center gap-8 mb-8 animate-in slide-in-from-bottom-8 duration-700 flex-wrap">
+          <Image src="/logo - FullSize.png" alt="Relic OS Logo" width={128} height={128} className="drop-shadow-[4px_4px_0px_var(--color-base-content)]" />
           <div className="text-primary hidden sm:block">
-            <pre className="text-xs leading-tight font-bold">
-{`   _____      .__  .__        
-  /  _  \\_.__.|  | |__| ____  
- /  /_\\  \\  __\\  | |  |/ ___\\ 
-/    |    \\  | \\  |_|  \\  \\___ 
-\\____|__  /__| |____/__|\\___  >
-        \\/                  \\/ `}
+            <pre className="text-xs md:text-sm leading-tight font-bold text-left">
+{`  _____  ______ _      _____ _____    ____   _____ 
+ |  __ \\|  ____| |    |_   _/ ____|  / __ \\ / ____|
+ | |__) | |__  | |      | || |      | |  | | (___  
+ |  _  /|  __| | |      | || |      | |  | |\\___ \\ 
+ | | \\ \\| |____| |____ _| || |____  | |__| |____) |
+ |_|  \\_\\______|______|_____\\_____|  \\____/|_____/ `}
             </pre>
           </div>
-          <div className="flex flex-col gap-1 text-xs sm:text-sm">
-            <div><span className="text-primary font-bold">root</span>@<span className="text-primary font-bold">relicos</span></div>
-            <div>-------------------</div>
-            <div><span className="text-primary font-bold">OS:</span> Relic OS (Arch Linux Base)</div>
-            <div><span className="text-primary font-bold">Host:</span> GameBoy Emulator Platform</div>
-            <div><span className="text-primary font-bold">Kernel:</span> 6.9.1-retro</div>
-            <div><span className="text-primary font-bold">Uptime:</span> 0 mins</div>
-            <div><span className="text-primary font-bold">Packages:</span> 404 (pacman)</div>
-            <div><span className="text-primary font-bold">Shell:</span> bash 5.2.26</div>
-            <div><span className="text-primary font-bold">WM:</span> Custom Tiling (Retro)</div>
-            <div><span className="text-primary font-bold">Theme:</span> original</div>
-            <div><span className="text-primary font-bold">Terminal:</span> tty1</div>
-            <div className="mt-2 flex gap-1">
-               <div className="w-4 h-4 bg-base-300"></div>
-               <div className="w-4 h-4 bg-error"></div>
-               <div className="w-4 h-4 bg-success"></div>
-               <div className="w-4 h-4 bg-warning"></div>
-               <div className="w-4 h-4 bg-info"></div>
-               <div className="w-4 h-4 bg-purple-500"></div>
-               <div className="w-4 h-4 bg-cyan-500"></div>
-               <div className="w-4 h-4 bg-base-100"></div>
-            </div>
-          </div>
         </div>
-      )}
+
+        {/* Fake BIOS Screen */}
+        <div className="flex flex-col bg-base-200 gap-2 text-sm md:text-base mb-12 w-full min-w-1/2  bg-base-100 p-6 border-2 border-success shadow-[4px_4px_0px_var(--color-success)] h-88 overflow-y-auto">
+          {logs.map((log, i) => (
+            <div key={i}>[ <span className="text-primary font-bold">OK</span> ] {log}</div>
+          ))}
+          {!showButton && (
+            <div className="animate-pulse">_</div>
+          )}
+        </div>
+
+        {/* Start Button */}
+        {showButton && (
+          <div className="animate-in fade-in zoom-in duration-500">
+            <Button 
+              onClick={onComplete}
+              size="lg"
+              className="text-2xl py-8 px-12 animate-pulse shadow-[8px_8px_0px_var(--color-base-content)] hover:shadow-[4px_4px_0px_var(--color-base-content)] hover:translate-y-1 font-heading uppercase tracking-widest border-4 border-base-content bg-primary text-primary-content transition-all"
+            >
+              Start OS
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

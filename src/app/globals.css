@@ -174,7 +174,7 @@
 @theme {
   --font-heading: var(--font-primary);
   --font-body: var(--font-main);
-  
+
   --radius-sm: var(--rad-sm, 0.25rem);
   --radius-md: var(--rad-md, 0.5rem);
   --radius-lg: var(--rad-lg, 0.75rem);
@@ -233,11 +233,11 @@
     --input: var(--color-base-content);
     --ring: var(--color-primary);
   }
-  
+
   :root[data-corners="round"] {
     --rad-window: 0.75rem;
     --rad-widget: 1rem;
-    
+
     --rad-sm: 0.25rem;
     --rad-md: 0.5rem;
     --rad-lg: 0.75rem;
@@ -269,10 +269,29 @@
   }
 }
 
-
-
 /* Pixel art icons rendering */
 svg {
   image-rendering: pixelated;
   shape-rendering: crispEdges;
+}
+
+@theme inline {
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+    }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+    }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
 }

@@ -1,46 +1,77 @@
-import { Monitor, Grid3x3, Brush } from 'pixelarticons/react';
+'use client';
+
+import { Folder, Clock, Calendar, ColorsSwatch, Music, Search, Tv } from 'pixelarticons/react';
+
+const features = [
+  {
+    icon: Search,
+    name: "Web Browser",
+    description: "A standalone web browser, providing a complete view of the internet through a unique retro lens.",
+    colorVar: "var(--color-primary)",
+  },
+  {
+    icon: Tv,
+    name: "YouTube Viewer",
+    description: "A dedicated video client built to play YouTube content natively within a custom window frame.",
+    colorVar: "var(--color-error)",
+  },
+  {
+    icon: ColorsSwatch,
+    name: "Custom Themes",
+    description: "A finished collection of 5 distinct hardware-inspired color palettes that set the visual tone.",
+    colorVar: "var(--color-accent)",
+  },
+  {
+    icon: Folder,
+    name: "Window Manager",
+    description: "A complete windowing system that faithfully recreates classic desktop environments.",
+    colorVar: "var(--color-info)",
+  },
+  {
+    icon: Music,
+    name: "Music Player",
+    description: "An integrated audio engine engineered for flawless playback with unified system controls.",
+    colorVar: "var(--color-secondary)",
+  },
+  {
+    icon: Calendar,
+    name: "Widgets & Apps",
+    description: "A full suite of built-in utilities, including a calculator, clock, and calendar.",
+    colorVar: "var(--color-warning)",
+  },
+];
 
 export function Features() {
   return (
-    <section id="features" className="py-24 bg-transparent border-t-2 border-base-content relative z-10">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="font-heading text-4xl uppercase tracking-widest text-primary mb-4" style={{ textShadow: "3px 3px 0px var(--color-base-content)" }}>
-            System Specs
-          </h2>
-          <p className="font-body text-xl opacity-80">Everything you need to play the best indie games on the web.</p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          <FeatureCard 
-            icon={<Grid3x3 size={48} />}
-            title="Window Manager"
-            desc="A fully functional desktop environment in your browser. Drag, resize, and multitask like it's 1999."
-          />
-          <FeatureCard 
-            icon={<Monitor size={48} />}
-            title="Curated Library"
-            desc="Discover hand-picked web-based indie games from itch.io. No downloads, no installations, just play."
-          />
-          <FeatureCard 
-            icon={<Brush size={48} />}
-            title="Retro Themes"
-            desc="Swap between authentic Game Boy inspired color palettes or create your own custom theme."
-          />
+    <section id="features" className="py-24 bg-base-100 border-b-2 border-base-content px-4">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-4xl md:text-6xl font-black font-heading uppercase tracking-widest text-base-content text-center mb-16">
+          Core Features
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, i) => (
+            <div 
+              key={feature.name}
+              className={`flex flex-col justify-start border-4 border-base-content bg-base-200 p-6 md:p-8 transition-transform hover:-translate-y-2`}
+              style={{ boxShadow: `8px 8px 0px ${feature.colorVar}` }}
+            >
+              <div 
+                className="inline-flex w-fit p-4 border-4 border-base-content bg-base-100 mb-6"
+                style={{ boxShadow: `4px 4px 0px ${feature.colorVar}` }}
+              >
+                <feature.icon className="w-10 h-10 text-base-content" />
+              </div>
+              <h3 className="font-heading text-2xl md:text-3xl font-black uppercase tracking-wider text-base-content mb-4">
+                {feature.name}
+              </h3>
+              <p className="font-body text-lg font-medium text-base-content/80 leading-relaxed">
+                {feature.description}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
-  );
-}
-
-function FeatureCard({ icon, title, desc }) {
-  return (
-    <div className="bg-base-100 border-2 border-base-content p-8 flex flex-col items-center text-center shadow-[6px_6px_0px_var(--color-base-content)] hover:-translate-y-2 hover:shadow-[10px_10px_0px_var(--color-base-content)] transition-all duration-300">
-      <div className="text-primary mb-6">
-        {icon}
-      </div>
-      <h3 className="font-heading text-2xl uppercase mb-4">{title}</h3>
-      <p className="font-body leading-relaxed opacity-80">{desc}</p>
-    </div>
   );
 }

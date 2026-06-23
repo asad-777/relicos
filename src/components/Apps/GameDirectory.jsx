@@ -59,19 +59,19 @@ export default function GameDirectory() {
   }
 
   return (
-    <div className="p-4 grid grid-cols-2 gap-4 h-full overflow-y-auto" data-lenis-prevent="true">
+    <div className="p-4 grid grid-cols-2 gap-4 h-fit min-h-80 overflow-y-auto" data-lenis-prevent="true">
       {games.map(game => (
         <div 
           key={game.id} 
-          className="border-2 border-base-content bg-base-200 cursor-pointer hover:bg-primary hover:text-primary-content transition-colors group p-2 flex flex-col"
+          className=" bg-base-200 cursor-pointer hover:bg-primary hover:text-primary-content transition-colors group p-2 flex flex-col"
           onClick={() => {
             openWindow({
               id: `game-${game.id}`,
               title: game.title,
               type: 'iframe',
               url: game.embed_url,
-              width: 800,
-              height: 600
+              width: 1080,
+              height: 920
             });
           }}
         >

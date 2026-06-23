@@ -411,7 +411,10 @@ export default function Desktop() {
                 key="iframe"
                 src={w.url} 
                 className="w-full h-full border-none rounded-b-xl" 
-                allow="autoplay; fullscreen" 
+                frameBorder="0"
+                sandbox="allow-scripts allow-same-origin allow-forms"
+                allowFullScreen
+                allow="autoplay; gamepad; fullscreen" 
               />
             )}
 
