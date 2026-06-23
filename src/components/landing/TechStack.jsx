@@ -84,12 +84,12 @@ const TechCard = ({ name, icon }) => {
 
 export function TechStack() {
   return (
-    <section className="py-16  border-b-2 border-base-content flex flex-col items-center">
+    <section className="py-16 border-b-2 border-base-content flex flex-col items-center px-6 md:px-8">
       <h2 className="text-3xl md:text-5xl font-black font-heading uppercase tracking-widest text-base-content mb-12 text-center">
         Tech Stack
       </h2>
-      <div className="w-full max-w-7xl px-4 mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <div className="w-full max-w-7xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8">
           {techStack.map((tech) => (
             <TechCard key={tech.name} name={tech.name} icon={tech.icon} />
           ))}

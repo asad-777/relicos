@@ -17,7 +17,7 @@ export function Gallery() {
 
   return (
     <section id="gallery" className="py-40 bg-base-200 border-b-2 border-base-content">
-      <div className="max-w-6xl mx-auto px-4 text-center">
+      <div className="max-w-6xl mx-auto px-6 md:px-8 text-center">
         <h2 className="text-4xl md:text-6xl font-black font-heading uppercase tracking-widest text-base-content mb-12">
           System Interface
         </h2>

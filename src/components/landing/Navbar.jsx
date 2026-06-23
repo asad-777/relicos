@@ -24,7 +24,7 @@ export function Navbar() {
           <ThemeSwitcher />
         </div>
         <Link href="/os">
-          <Button className="font-heading rounded-none py-4 uppercase tracking-widest border-2 border-primary-content bg-primary text-primary-content shadow-[4px_4px_0px_var(--color-base-content)] hover:bg-primary/90 hover:translate-y-1 hover:shadow-none transition-all">
+          <Button className="font-heading rounded-none py-2 px-4 md:py-4 md:px-6 text-sm md:text-base uppercase tracking-widest border-2 border-primary-content bg-primary text-primary-content shadow-[4px_4px_0px_var(--color-base-content)] hover:bg-primary/90 hover:translate-y-1 hover:shadow-none transition-all">
             Boot OS
           </Button>
         </Link>
